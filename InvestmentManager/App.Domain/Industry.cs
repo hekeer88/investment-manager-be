@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Transactions;
+using App.Domain.identity;
 using Base.Domain;
 
 namespace App.Domain;
 
-public class Cash : DomainEntityMetaId
+public class Industry : DomainEntityMetaId
 {
-    public string Currency { get; set; } = default!;
-    public ICollection<Transaction>? Transactions { get; set; }
-
-    public Guid PortfolioId { get; set; }
-    public Portfolio? Portfolio { get; set; }
-
+    [MaxLength(32)]
+    public string Name { get; set; } = default!;
+    public ICollection<Stock>? Stocks { get; set; }
+    
+    // no appuser if for standard and shared Industry
+    public Guid? AppUserId { get; set; }
+    public AppUser? AppUser { get; set; }
 
 }

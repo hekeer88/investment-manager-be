@@ -4,10 +4,13 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class Industry : DomainEntityMetaId
+public class Price : DomainEntityMetaId
 {
-    [MaxLength(32)]
-    public string Name { get; set; } = default!;
-    public ICollection<Stock>? Stocks { get; set; }
+    [Range(0, 9999999999.99)]
+    public decimal CurrentPrice { get; set; } = default!;
+    public DateTime PriceTime { get; set; } = default;
+    
+    public Guid StockId { get; set; }
+    public Stock? Stock { get; set; }
 
 }

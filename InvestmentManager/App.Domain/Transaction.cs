@@ -4,23 +4,22 @@ using Base.Domain;
 
 namespace App.Domain;
 
-public class Stock : DomainEntityMetaId
+public class Transaction : DomainEntityMetaId
 {
-    [MaxLength(32)]
-    public string Company { get; set; } = default!;
-    [MaxLength(8)]
-    public string Ticker { get; set; } = default!;
-    [MaxLength(256)]
-    public string? Comment { get; set; }
+    public int? Quantity { get; set; }
+    [Range(0, 9999999999.99)]
+    public decimal TransactionPrice { get; set; } = default!;
+    public DateTime TransactionDate { get; set; } = default!;
+    public char Type { get; set; } = default!;
     
-    public ICollection<Price>? Prices { get; set; }
-    public ICollection<Transaction>? Transactions { get; set; }
+    public Guid StockId { get; set; }
+    public Stock? Stock { get; set; }
     
-    public Guid PortfolioId { get; set; }
-    public Portfolio? Portfolio { get; set; }
+    public Guid LoanId { get; set; }
+    public Loan? Loan { get; set; }
     
-    public Guid IndustryId { get; set; }
-    public Industry? Industry { get; set; }
+    public Guid CashId { get; set; }
+    public Cash? Cash { get; set; }
 
-    
+
 }

@@ -1,11 +1,14 @@
 ﻿using App.Domain;
+using App.Domain.identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Data;
 
-public class AppDbContext : IdentityDbContext
+// generics to use own Users and Roles
+public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid> 
 {
+    
     public DbSet<Cash> Cashes { get; set; } = default!;
     public DbSet<Industry> Industries { get; set; } = default!;
     public DbSet<Loan> Loans { get; set; } = default!;
@@ -19,9 +22,9 @@ public class AppDbContext : IdentityDbContext
     { 
         base.OnModelCreating(builder);
 
-        builder.Entity<Stock>()
-            .HasOne(s => s.Portfolio)
-            .WithMany(p => p.Stocks);
+        // builder.Entity<Stock>()
+        //     .HasOne(s => s.Portfolio)
+        //     .WithMany(p => p.Stocks);
 
     }
     
