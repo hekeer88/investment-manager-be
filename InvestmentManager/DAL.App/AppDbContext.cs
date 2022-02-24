@@ -14,6 +14,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<Loan> Loans { get; set; } = default!;
     public DbSet<Portfolio> Portfolios { get; set; } = default!;
     public DbSet<Price> Prices { get; set; } = default!;
+    public DbSet<Region> Regions { get; set; } = default!;
     public DbSet<Stock> Stocks { get; set; } = default!;
     public DbSet<Transaction> Transactions { get; set; } = default!;
     

@@ -25,5 +25,8 @@ public class Loan : DomainEntityMetaId
     public Guid PortfolioId { get; set; }
     public Portfolio? Portfolio { get; set; }
     
+    public Guid RegionId { get; set; }
+    public Region? Region { get; set; }
+    
     
 }

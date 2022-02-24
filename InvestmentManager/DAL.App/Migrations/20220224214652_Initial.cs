@@ -49,6 +49,23 @@ namespace DAL.App.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Regions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Country = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    Continent = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Regions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -238,6 +255,7 @@ namespace DAL.App.Migrations
                     ScheduleType = table.Column<char>(type: "TEXT", nullable: false),
                     Interest = table.Column<decimal>(type: "TEXT", nullable: false),
                     PortfolioId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RegionId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedBy = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
@@ -252,6 +270,12 @@ namespace DAL.App.Migrations
                         principalTable: "Portfolios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Loans_Regions_RegionId",
+                        column: x => x.RegionId,
+                        principalTable: "Regions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +286,7 @@ namespace DAL.App.Migrations
                     Company = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
                     Ticker = table.Column<string>(type: "TEXT", maxLength: 8, nullable: false),
                     Comment = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    RegionId = table.Column<Guid>(type: "TEXT", nullable: false),
                     PortfolioId = table.Column<Guid>(type: "TEXT", nullable: false),
                     IndustryId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
@@ -282,6 +307,12 @@ namespace DAL.App.Migrations
                         name: "FK_Stocks_Portfolios_PortfolioId",
                         column: x => x.PortfolioId,
                         principalTable: "Portfolios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Regions_RegionId",
+                        column: x => x.RegionId,
+                        principalTable: "Regions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -403,6 +434,11 @@ namespace DAL.App.Migrations
                 column: "PortfolioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Loans_RegionId",
+                table: "Loans",
+                column: "RegionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Portfolios_AppUserId",
                 table: "Portfolios",
                 column: "AppUserId");
@@ -421,6 +457,11 @@ namespace DAL.App.Migrations
                 name: "IX_Stocks_PortfolioId",
                 table: "Stocks",
                 column: "PortfolioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_RegionId",
+                table: "Stocks",
+                column: "RegionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CashId",
@@ -478,6 +519,9 @@ namespace DAL.App.Migrations
 
             migrationBuilder.DropTable(
                 name: "Portfolios");
+
+            migrationBuilder.DropTable(
+                name: "Regions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

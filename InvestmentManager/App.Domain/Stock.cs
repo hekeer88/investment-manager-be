@@ -16,6 +16,8 @@ public class Stock : DomainEntityMetaId
     public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
     
+    public Guid RegionId { get; set; }
+    public Region? Region { get; set; }
     public Guid PortfolioId { get; set; }
     public Portfolio? Portfolio { get; set; }
     public Guid IndustryId { get; set; }

@@ -11,13 +11,13 @@ using WebApp.Data;
 namespace DAL.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220218164831_Initial")]
+    [Migration("20220224214652_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
             modelBuilder.Entity("App.Domain.Cash", b =>
                 {
@@ -225,6 +225,9 @@ namespace DAL.App.Migrations
                     b.Property<Guid>("PortfolioId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("RegionId")
+                        .HasColumnType("TEXT");
+
                     b.Property<char>("ScheduleType")
                         .HasColumnType("TEXT");
 
@@ -238,6 +241,8 @@ namespace DAL.App.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PortfolioId");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Loans");
                 });
@@ -317,6 +322,41 @@ namespace DAL.App.Migrations
                     b.ToTable("Prices");
                 });
 
+            modelBuilder.Entity("App.Domain.Region", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Continent")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Regions");
+                });
+
             modelBuilder.Entity("App.Domain.Stock", b =>
                 {
                     b.Property<Guid>("Id")
@@ -345,6 +385,9 @@ namespace DAL.App.Migrations
                     b.Property<Guid>("PortfolioId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("RegionId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Ticker")
                         .IsRequired()
                         .HasMaxLength(8)
@@ -362,6 +405,8 @@ namespace DAL.App.Migrations
                     b.HasIndex("IndustryId");
 
                     b.HasIndex("PortfolioId");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Stocks");
                 });
@@ -545,7 +590,15 @@ namespace DAL.App.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("App.Domain.Region", "Region")
+                        .WithMany("Loans")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Portfolio");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("App.Domain.Portfolio", b =>
@@ -584,9 +637,17 @@ namespace DAL.App.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("App.Domain.Region", "Region")
+                        .WithMany("Stocks")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Industry");
 
                     b.Navigation("Portfolio");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("App.Domain.Transaction", b =>
@@ -686,6 +747,13 @@ namespace DAL.App.Migrations
                 {
                     b.Navigation("Cashes");
 
+                    b.Navigation("Loans");
+
+                    b.Navigation("Stocks");
+                });
+
+            modelBuilder.Entity("App.Domain.Region", b =>
+                {
                     b.Navigation("Loans");
 
                     b.Navigation("Stocks");

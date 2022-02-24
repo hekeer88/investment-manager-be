@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using WebApp.Data;
 
-namespace DAL.App;
+namespace WebApp.Data;
 
-public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)
     {
@@ -13,8 +12,4 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 
         return new AppDbContext(optionsBuilder.Options);
     }
-}
-
-public class BloggingContext : DbContext
-{
 }
