@@ -1,14 +1,14 @@
+namespace WebApp.Data;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace WebApp.Data;
-
-public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlite("Data Source=app.db");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5444;Username=postgres;Password=postgres;database=InvestmentManager");
 
         return new AppDbContext(optionsBuilder.Options);
     }

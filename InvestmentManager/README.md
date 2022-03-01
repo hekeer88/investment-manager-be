@@ -3,11 +3,14 @@
 Database migrations and update
 ~~~sh
 dotnet ef migrations add --project DAL.App --startup-project WebApp Initial
+dotnet ef migrations remove --project DAL.App --startup-project WebApp --context AppDbContext
 dotnet ef database update --project DAL.App --startup-project WebApp
+dotnet ef database drop --project DAL.App.EF --startup-project WebApp
 ~~~
 
 
 Web Controllers
+keep this controllers for testing what is db for example
 ~~~sh
 cd WebApp
 dotnet aspnet-codegenerator controller -name PortfoliosController   -actions -m App.Domain.Portfolio   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
@@ -17,7 +20,7 @@ dotnet aspnet-codegenerator controller -name LoansController   -actions -m App.D
 dotnet aspnet-codegenerator controller -name PricesController   -actions -m App.Domain.Price   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name RegionsController   -actions -m App.Domain.Region   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name StocksController   -actions -m App.Domain.Stock   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
-dotnet aspnet-codegenerator controller -name TransactionsControllers   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name TransactionsController   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 ~~~
 
 Web Api Controllers
@@ -30,7 +33,7 @@ dotnet aspnet-codegenerator controller -name LoansController   -actions -m App.D
 dotnet aspnet-codegenerator controller -name PricesController   -actions -m App.Domain.Price   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 dotnet aspnet-codegenerator controller -name RegionsController   -actions -m App.Domain.Region   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 dotnet aspnet-codegenerator controller -name StocksController   -actions -m App.Domain.Stock   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
-dotnet aspnet-codegenerator controller -name TransactionsControllers   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+dotnet aspnet-codegenerator controller -name TransactionsController   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 ~~~
 
 

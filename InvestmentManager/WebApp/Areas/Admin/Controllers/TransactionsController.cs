@@ -12,23 +12,23 @@ using WebApp.Data;
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class TransactionsControllers : Controller
+    public class TransactionsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public TransactionsControllers(AppDbContext context)
+        public TransactionsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/TransactionsControllers
+        // GET: Admin/Transactions
         public async Task<IActionResult> Index()
         {
             var appDbContext = _context.Transactions.Include(t => t.Cash).Include(t => t.Loan).Include(t => t.Stock);
             return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Admin/TransactionsControllers/Details/5
+        // GET: Admin/Transactions/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -49,7 +49,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(transaction);
         }
 
-        // GET: Admin/TransactionsControllers/Create
+        // GET: Admin/Transactions/Create
         public IActionResult Create()
         {
             ViewData["CashId"] = new SelectList(_context.Cashes, "Id", "Currency");
@@ -58,7 +58,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/TransactionsControllers/Create
+        // POST: Admin/Transactions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -78,7 +78,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(transaction);
         }
 
-        // GET: Admin/TransactionsControllers/Edit/5
+        // GET: Admin/Transactions/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -97,7 +97,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(transaction);
         }
 
-        // POST: Admin/TransactionsControllers/Edit/5
+        // POST: Admin/Transactions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -135,7 +135,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(transaction);
         }
 
-        // GET: Admin/TransactionsControllers/Delete/5
+        // GET: Admin/Transactions/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -156,7 +156,7 @@ namespace WebApp.Areas.Admin.Controllers
             return View(transaction);
         }
 
-        // POST: Admin/TransactionsControllers/Delete/5
+        // POST: Admin/Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
