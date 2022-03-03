@@ -12,7 +12,7 @@ using WebApp.Data;
 namespace DAL.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220301183903_Initial")]
+    [Migration("20220303233529_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -422,7 +422,7 @@ namespace DAL.App.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CashId")
+                    b.Property<Guid?>("CashId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -432,13 +432,13 @@ namespace DAL.App.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<Guid>("LoanId")
+                    b.Property<Guid?>("LoanId")
                         .HasColumnType("uuid");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("StockId")
+                    b.Property<Guid?>("StockId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("TransactionDate")
@@ -665,20 +665,17 @@ namespace DAL.App.Migrations
                     b.HasOne("App.Domain.Cash", "Cash")
                         .WithMany("Transactions")
                         .HasForeignKey("CashId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("App.Domain.Loan", "Loan")
                         .WithMany("Transactions")
                         .HasForeignKey("LoanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("App.Domain.Stock", "Stock")
                         .WithMany("Transactions")
                         .HasForeignKey("StockId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cash");
 
