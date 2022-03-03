@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using Base.Contracts.Domain;
 
 namespace Base.Domain;
@@ -13,8 +14,8 @@ public abstract class DomainEntityMetaId<TKey> : DomainEntityId<TKey>, IDomainEn
     where TKey : IEquatable<TKey>
 {
     [MaxLength(32)]
-    public string? CreatedBy { get; set; }
-    public DateTime CreatedAt { get; set; }  = DateTime.UtcNow;
+    public string? CreatedBy { get; set; } 
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [MaxLength(32)]
     public string? UpdatedBy { get; set; }
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

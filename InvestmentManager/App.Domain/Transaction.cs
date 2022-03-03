@@ -12,13 +12,13 @@ public class Transaction : DomainEntityMetaId
     public DateTime TransactionDate { get; set; } = default!;
     public char Type { get; set; } = default!;
     
-    public Guid StockId { get; set; }
+    public Guid? StockId { get; set; }
     public Stock? Stock { get; set; }
     
-    public Guid LoanId { get; set; }
+    public Guid? LoanId { get; set; }
     public Loan? Loan { get; set; }
     
-    public Guid CashId { get; set; }
+    public Guid? CashId { get; set; }
     public Cash? Cash { get; set; }
 
 

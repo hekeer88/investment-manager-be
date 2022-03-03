@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Transactions;
 using Base.Domain;
 
@@ -13,4 +14,8 @@ public class Price : DomainEntityMetaId
     public Guid StockId { get; set; }
     public Stock? Stock { get; set; }
 
+    public override string ToString()
+    {
+        return CurrentPrice.ToString(CultureInfo.InvariantCulture);
+    }
 }
