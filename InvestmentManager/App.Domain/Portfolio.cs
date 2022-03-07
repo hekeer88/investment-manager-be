@@ -7,6 +7,7 @@ namespace App.Domain;
 public class Portfolio : DomainEntityMetaId
 {
     [MaxLength(64)]
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Name))]
     public string Name { get; set; } = default!;
     [MaxLength(512)]
     public string? Description { get; set; } 
