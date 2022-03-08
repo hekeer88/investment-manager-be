@@ -23,7 +23,7 @@ dotnet aspnet-codegenerator controller -name StocksController   -actions -m App.
 dotnet aspnet-codegenerator controller -name TransactionsController   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 ~~~
 
-Web Api Controllers
+WebApi Controllers
 ~~~sh
 cd WebApp
 dotnet aspnet-codegenerator controller -name PortfoliosController   -actions -m App.Domain.Portfolio   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
