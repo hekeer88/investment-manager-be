@@ -11,6 +11,10 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Portfolio.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Stock.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Stock.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -18,6 +22,11 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Portfolio.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Stock.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Stock.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

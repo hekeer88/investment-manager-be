@@ -21,4 +21,10 @@
     <data name="Name" xml:space="preserve">
         <value>Nimi</value>
     </data>
+    <data name="Description" xml:space="preserve">
+        <value>Kirjeldus</value>
+    </data>
+    <data name="AppUser" xml:space="preserve">
+        <value>Kasutaja</value>
+    </data>
 </root>

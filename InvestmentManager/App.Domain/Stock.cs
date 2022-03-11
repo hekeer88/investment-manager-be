@@ -7,8 +7,10 @@ namespace App.Domain;
 public class Stock : DomainEntityMetaId
 {
     [MaxLength(32)]
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Company))]
     public string Company { get; set; } = default!;
     [MaxLength(8)]
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Ticker))]
     public string Ticker { get; set; } = default!;
     [MaxLength(256)]
     public string? Comment { get; set; }
