@@ -56,5 +56,29 @@ namespace App.Resources.App.Domain {
                 return ResourceManager.GetString("Ticker", resourceCulture);
             }
         }
+        
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        public static string Region {
+            get {
+                return ResourceManager.GetString("Region", resourceCulture);
+            }
+        }
+        
+        public static string Portfolio {
+            get {
+                return ResourceManager.GetString("Portfolio", resourceCulture);
+            }
+        }
+        
+        public static string Industry {
+            get {
+                return ResourceManager.GetString("Industry", resourceCulture);
+            }
+        }
     }
 }

@@ -17,4 +17,16 @@
     <data name="Ticker" xml:space="preserve">
         <value>Ticker</value>
     </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Comment</value>
+    </data>
+    <data name="Region" xml:space="preserve">
+        <value>Region</value>
+    </data>
+    <data name="Portfolio" xml:space="preserve">
+        <value>Portfolio</value>
+    </data>
+    <data name="Industry" xml:space="preserve">
+        <value>Industry</value>
+    </data>
 </root>

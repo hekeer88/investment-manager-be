@@ -24,4 +24,16 @@
     <data name="Ticker" xml:space="preserve">
         <value>Tähis</value>
     </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Kommentaar</value>
+    </data>
+    <data name="Region" xml:space="preserve">
+        <value>Regioon</value>
+    </data>
+    <data name="Portfolio" xml:space="preserve">
+        <value>Portfell</value>
+    </data>
+    <data name="Industry" xml:space="preserve">
+        <value>Tööstusharud</value>
+    </data>
 </root>
