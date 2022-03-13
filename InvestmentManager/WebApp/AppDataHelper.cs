@@ -1,5 +1,8 @@
+using App.Domain;
+using App.Resources.App.Domain;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
+using Portfolio = App.Domain.Portfolio;
 
 namespace WebApp;
 
@@ -38,7 +41,23 @@ public static class AppDataHelper
         }
         if (configuration.GetValue<bool>("DataInitialization:SeedData"))
         {
-            // TODO:
+            var region = new Region
+            {
+                Country = 
+                {
+                    ["et-EE"] = "Eesti",
+                    ["en-GB"] = "Estonia"
+                },
+                Continent = 
+                {
+                    ["et-EE"] = "Euroopa",
+                    ["en-GB"] = "Europe"
+                }
+            };
+            
+            
+            context.Regions.Add(region);
+            context.SaveChanges();
         }
         
     }

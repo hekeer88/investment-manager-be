@@ -64,7 +64,6 @@ namespace WebApp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 portfolio.Id = Guid.NewGuid();
-                
                 _context.Add(portfolio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

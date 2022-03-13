@@ -1,14 +1,11 @@
-#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Domain;
 using WebApp.Data;
+using WebApp.DTO;
 
+// TODO: peaks uue tegema, sest siin veel LangStr teema sees 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
@@ -24,9 +21,17 @@ namespace WebApp.ApiControllers
 
         // GET: api/Portfolios
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Portfolio>>> GetPortfolios()
+        public async Task<ActionResult<IEnumerable<PortfolioDTO>>> GetPortfolios()
         {
-            return await _context.Portfolios.ToListAsync();
+
+            var result = (await _context.Portfolios.ToListAsync())
+            .Select(x => new PortfolioDTO()
+                {
+                    Id = x.Id,
+                    // Name = x.Name,
+                })
+                .ToList();
+            return result;
         }
 
         // GET: api/Portfolios/5
@@ -46,14 +51,21 @@ namespace WebApp.ApiControllers
         // PUT: api/Portfolios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPortfolio(Guid id, Portfolio portfolio)
+        public async Task<IActionResult> PutPortfolio(Guid id, PortfolioDTO portfolio)
         {
             if (id != portfolio.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(portfolio).State = EntityState.Modified;
+            var portfolioFromDb = await _context.Portfolios.FindAsync(id);
+            if (portfolioFromDb == null)
+            {
+                return NotFound();
+            }
+            // portfolioFromDb.Name.SetTranslation(portfolio.Name);
+                
+            _context.Entry(portfolioFromDb).State = EntityState.Modified;
 
             try
             {

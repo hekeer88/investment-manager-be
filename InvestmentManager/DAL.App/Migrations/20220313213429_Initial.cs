@@ -1,4 +1,5 @@
 ﻿using System;
+using Base.Domain;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -54,8 +55,8 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Country = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    Continent = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    Country = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
+                    Continent = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
@@ -202,7 +203,7 @@ namespace DAL.App.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),

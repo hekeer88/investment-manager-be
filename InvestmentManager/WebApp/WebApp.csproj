@@ -32,4 +32,8 @@
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\CashesController\Index.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ApiControllers" />
+    </ItemGroup>
+
 </Project>

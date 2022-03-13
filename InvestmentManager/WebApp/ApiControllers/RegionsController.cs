@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
 using WebApp.Data;
+using WebApp.DTO;
 
 namespace WebApp.ApiControllers
 {
@@ -24,9 +25,17 @@ namespace WebApp.ApiControllers
 
         // GET: api/Regions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Region>>> GetRegions()
+        public async Task<ActionResult<IEnumerable<RegionDTO>>> GetRegions()
         {
-            return await _context.Regions.ToListAsync();
+            var result = (await _context.Regions.ToListAsync())
+                .Select(x => new RegionDTO()
+                {
+                    Id = x.Id,
+                    Country = x.Country,
+                    Continent = x.Continent
+                })
+                .ToList();
+            return result;
         }
 
         // GET: api/Regions/5
@@ -46,12 +55,21 @@ namespace WebApp.ApiControllers
         // PUT: api/Regions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegion(Guid id, Region region)
+        public async Task<IActionResult> PutRegion(Guid id, RegionDTO region)
         {
             if (id != region.Id)
             {
                 return BadRequest();
             }
+            
+            
+            var regionFromDb = await _context.Regions.FindAsync(id);
+            if (regionFromDb == null)
+            {
+                return NotFound();
+            }
+            regionFromDb.Country.SetTranslation(region.Country);
+            regionFromDb.Continent.SetTranslation(region.Continent);
 
             _context.Entry(region).State = EntityState.Modified;
 

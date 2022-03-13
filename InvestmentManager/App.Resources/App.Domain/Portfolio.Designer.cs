@@ -21,7 +21,7 @@ namespace App.Resources.App.Domain {
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Portfolio() {
+        public Portfolio() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -45,12 +45,6 @@ namespace App.Resources.App.Domain {
             }
         }
         
-        public static string Name {
-            get {
-                return ResourceManager.GetString("Name", resourceCulture);
-            }
-        }
-        
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
@@ -60,6 +54,12 @@ namespace App.Resources.App.Domain {
         public static string AppUser {
             get {
                 return ResourceManager.GetString("AppUser", resourceCulture);
+            }
+        }
+        
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
     }
