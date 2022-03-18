@@ -13,7 +13,7 @@ using WebApp.Data;
 namespace DAL.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220313213429_Initial")]
+    [Migration("20220318151855_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -167,10 +167,10 @@ namespace DAL.App.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<string>("Name")
+                    b.Property<LangStr>("Name")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("jsonb");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

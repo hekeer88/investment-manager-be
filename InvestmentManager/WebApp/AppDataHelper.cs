@@ -2,6 +2,7 @@ using App.Domain;
 using App.Resources.App.Domain;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
+using Industry = App.Domain.Industry;
 using Portfolio = App.Domain.Portfolio;
 using Region = App.Domain.Region;
 
@@ -56,7 +57,27 @@ public static class AppDataHelper
                 }
             };
             
-            
+            var telecommunication = new Industry
+            {
+                Name = 
+                {
+                    ["et-EE"] = "Telekommunikatsioon",
+                    ["en-GB"] = "Telecommunication"
+                },
+               
+            };
+            var finance = new Industry
+            {
+                Name = 
+                {
+                    ["et-EE"] = "Finantsteenused",
+                    ["en-GB"] = "Financial Services"
+                },
+               
+            };
+
+            context.Industries.Add(finance);
+            context.Industries.Add(telecommunication);
             context.Regions.Add(region);
             context.SaveChanges();
         }

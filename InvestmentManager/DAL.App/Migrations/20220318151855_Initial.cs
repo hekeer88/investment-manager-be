@@ -178,7 +178,7 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    Name = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Transactions;
 using App.Domain.identity;
 using Base.Domain;
@@ -7,9 +8,10 @@ namespace App.Domain;
 
 public class Industry : DomainEntityMetaId
 {
-    [MaxLength(32)]
+
     [Display(ResourceType = typeof(App.Resources.App.Domain.Industry), Name = nameof(Name))]
-    public string Name { get; set; } = default!;
+    [Column(TypeName = "jsonb")]
+    public LangStr Name { get; set; } = new();
     public ICollection<Stock>? Stocks { get; set; }
     
     // no appuser if for standard and shared Industry
