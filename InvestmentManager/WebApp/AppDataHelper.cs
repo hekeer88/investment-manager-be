@@ -3,6 +3,7 @@ using App.Resources.App.Domain;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using Portfolio = App.Domain.Portfolio;
+using Region = App.Domain.Region;
 
 namespace WebApp;
 

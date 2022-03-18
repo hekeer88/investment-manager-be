@@ -8,6 +8,7 @@ namespace App.Domain;
 public class Industry : DomainEntityMetaId
 {
     [MaxLength(32)]
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Industry), Name = nameof(Name))]
     public string Name { get; set; } = default!;
     public ICollection<Stock>? Stocks { get; set; }
     

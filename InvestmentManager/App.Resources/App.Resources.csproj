@@ -20,6 +20,26 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Loan.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Cash.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Cash.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Transaction.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Transaction.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Region.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Region.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Price.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Price.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Industry.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Industry.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -37,6 +57,31 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Loan.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Cash.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Cash.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Transaction.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Transaction.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Region.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Region.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Price.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Price.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Industry.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Industry.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
