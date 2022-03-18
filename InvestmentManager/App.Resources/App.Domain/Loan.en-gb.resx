@@ -1,0 +1,41 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LoanName" xml:space="preserve">
+        <value>Name of Loan</value>
+    </data>
+    <data name="BorrowerName" xml:space="preserve">
+        <value>Name of Borrower</value>
+    </data>
+    <data name="ContractNumber" xml:space="preserve">
+        <value>Contract number</value>
+    </data>
+    <data name="Collateral" xml:space="preserve">
+        <value>Collateral</value>
+    </data>
+    <data name="LoanDate" xml:space="preserve">
+        <value>Loan date</value>
+    </data>
+    <data name="EndDate" xml:space="preserve">
+        <value>Due date</value>
+    </data>
+    <data name="Amount" xml:space="preserve">
+        <value>Loan amount</value>
+    </data>
+    <data name="ScheduleType" xml:space="preserve">
+        <value>Schedule type</value>
+    </data>
+    <data name="Interest" xml:space="preserve">
+        <value>Interest</value>
+    </data>
+</root>

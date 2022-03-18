@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+<!--    Make generator public-->
     <ItemGroup>
       <EmbeddedResource Update="App.Domain\Portfolio.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
@@ -14,6 +15,10 @@
       <EmbeddedResource Update="App.Domain\Stock.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Stock.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="App.Domain\Loan.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Loan.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -27,6 +32,11 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Stock.resx</DependentUpon>
+      </Compile>
+      <Compile Update="App.Domain\Loan.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Loan.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

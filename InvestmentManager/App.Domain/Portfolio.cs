@@ -8,13 +8,9 @@ namespace App.Domain;
 public class Portfolio : DomainEntityMetaId
 {
     
-    // testing JSONB
     [MaxLength(64)]
-    // [Column(TypeName = "jsonb")]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name = nameof(Name))]
     public string Name { get; set; } = default!;
-    
-    
     
     [MaxLength(512)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
