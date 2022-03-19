@@ -1,11 +1,13 @@
 using System.Globalization;
+using App.Contracts.DAL;
+using App.DAL.EF;
+using App.DAL.EF.Repositories;
 using App.Domain.identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WebApp;
-using WebApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,9 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+// TODO: same for every Repo
 
 builder.Services.AddControllersWithViews();
 

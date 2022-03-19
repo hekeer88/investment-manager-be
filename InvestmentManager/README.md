@@ -2,10 +2,10 @@
 
 Database migrations and update
 ~~~sh
-dotnet ef migrations add --project DAL.App --startup-project WebApp Initial
-dotnet ef migrations remove --project DAL.App --startup-project WebApp --context AppDbContext
-dotnet ef database update --project DAL.App --startup-project WebApp
-dotnet ef database drop --project DAL.App --startup-project WebApp
+dotnet ef migrations add --project App.DAL.EF --startup-project WebApp Initial
+dotnet ef migrations remove --project App.DAL.EF --startup-project WebApp --context AppDbContext
+dotnet ef database update --project App.DAL.EF --startup-project WebApp
+dotnet ef database drop --project App.DAL.EF --startup-project WebApp
 ~~~
 
 

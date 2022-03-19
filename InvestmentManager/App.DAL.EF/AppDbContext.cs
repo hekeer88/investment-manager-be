@@ -3,7 +3,7 @@ using App.Domain.identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApp.Data;
+namespace App.DAL.EF;
 
 // generics to use own Users and Roles
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid> 

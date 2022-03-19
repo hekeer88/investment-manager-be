@@ -1,7 +1,7 @@
-namespace WebApp.Data;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+
+namespace App.DAL.EF;
 
 public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {

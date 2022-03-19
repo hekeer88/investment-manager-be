@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.DAL.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
-using WebApp.Data;
 
 namespace WebApp.Areas.Admin.Controllers
 {

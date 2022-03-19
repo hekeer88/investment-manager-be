@@ -1,7 +1,7 @@
+using App.DAL.EF;
 using App.Domain;
 using App.Resources.App.Domain;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
 using Industry = App.Domain.Industry;
 using Portfolio = App.Domain.Portfolio;
 using Region = App.Domain.Region;
