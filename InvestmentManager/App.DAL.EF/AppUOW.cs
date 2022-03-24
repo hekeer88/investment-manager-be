@@ -1,33 +1,23 @@
 using App.Contracts.DAL;
 using App.DAL.EF.Repositories;
 using Base.Contracts.DAL;
+using Base.DAL.EF;
 
 namespace App.DAL.EF;
 
-public class AppUOW : IAppUnitOfWork
+public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
 {
-
-    protected readonly AppDbContext UOWDbContext;
-
-    public AppUOW(AppDbContext uowDbContext)
+    
+    public AppUOW(AppDbContext dbContext) : base(dbContext)
     {
-        UOWDbContext = uowDbContext;
     }
     
+    private  IPortfolioRepository? _portfolios;
+    public virtual IPortfolioRepository Portfolios => _portfolios ??= new PortfolioRepository(UOWDbContext);
     
-    
-    
-    
-    public virtual async Task<int> SaveChangesAsync()
-    {
-        return await UOWDbContext.SaveChangesAsync();
-    }
+    // selliselt teha k6ik repod
+    private  IStockRepository? _stocks;
+    public virtual IStockRepository Stocks => _stocks ??= new StockRepository(UOWDbContext);
 
-    public virtual int SaveChanges()
-    {
-        return UOWDbContext.SaveChanges();
-    }
-
-    public virtual IPortfolioRepository Portfolios => new PortfolioRepository(UOWDbContext);
-    public virtual IStockRepository Stocks { get; }
+    
 }

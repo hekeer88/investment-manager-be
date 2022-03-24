@@ -41,16 +41,6 @@ where TDbContext: DbContext
         return query;
     }
 
-    public int SaveChanges()
-    {
-        return RepoDbContext.SaveChanges();
-    }
-
-    public async Task<int> SaveChangesAsync()
-    {
-        return await RepoDbContext.SaveChangesAsync();
-    }
-
     public virtual TEntity Add(TEntity entity)
     {
         return RepoDbSet.Add(entity).Entity;

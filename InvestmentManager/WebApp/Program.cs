@@ -31,8 +31,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-// TODO: same for every Repo
+builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
 
 builder.Services.AddControllersWithViews();
 

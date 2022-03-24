@@ -15,20 +15,20 @@ namespace WebApp.Areas.Admin.Controllers
     [Area("Admin")]
     public class PortfoliosController : Controller
     {
-        private readonly IPortfolioRepository _repo;
+        private readonly IAppUnitOfWork _uow;
 
         
         // changes for using REPO
-        public PortfoliosController(IPortfolioRepository repo)
+        public PortfoliosController(IAppUnitOfWork uow)
         {
-            _repo = repo;
+            _uow = uow;
         }
 
         // changes for using REPO
         // GET: Admin/Portfolios
         public async Task<IActionResult> Index()
         {
-            var res = await _repo.GetAllAsync(); 
+            var res = await _uow.Portfolios.GetAllAsync(); 
             return View(res);
         }
 
@@ -41,7 +41,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _repo.FirstOrDefaultAsync(id.Value);
+            var portfolio = await _uow.Portfolios.FirstOrDefaultAsync(id.Value);
             
             if (portfolio == null)
             {
@@ -69,9 +69,9 @@ namespace WebApp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 portfolio.Id = Guid.NewGuid();
-                _repo.Add(portfolio);
+                _uow.Portfolios.Add(portfolio);
 
-                await _repo.SaveChangesAsync();
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolio);
@@ -85,7 +85,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _repo.FirstOrDefaultAsync(id.Value);
+            var portfolio = await _uow.Portfolios.FirstOrDefaultAsync(id.Value);
             if (portfolio == null)
             {
                 return NotFound();
@@ -109,8 +109,8 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _repo.Update(portfolio);
-                    await _repo.SaveChangesAsync();
+                    _uow.Portfolios.Update(portfolio);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -136,7 +136,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _repo
+            var portfolio = await _uow.Portfolios
                 .FirstOrDefaultAsync(id.Value);
             if (portfolio == null)
             {
@@ -153,14 +153,14 @@ namespace WebApp.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
        
-            await _repo.RemoveAsync(id);
-            await _repo.SaveChangesAsync();
+            await _uow.Portfolios.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> PortfolioExists(Guid id)
         {
-            return await _repo.ExistsAsync(id);
+            return await _uow.Portfolios.ExistsAsync(id);
         }
     }
 }

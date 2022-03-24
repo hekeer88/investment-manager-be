@@ -11,13 +11,10 @@ where TEntity: class, IDomainEntityId
 
 // TODO: check the user ownership
 public interface IEntityRepository<TEntity, TKey> 
-where TEntity: class, IDomainEntityId<TKey>
-where TKey: IEquatable<TKey>
+    where TEntity: class, IDomainEntityId<TKey>
+    where TKey: IEquatable<TKey>
 {
-    //FIXME: Remove savechanges from repo!!
-    int SaveChanges();
-    Task<int> SaveChangesAsync();
-
+    
     // sync
     TEntity Add(TEntity entity);
     TEntity Update(TEntity entity);
