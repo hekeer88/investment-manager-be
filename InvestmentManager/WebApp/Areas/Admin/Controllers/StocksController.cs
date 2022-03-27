@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.DAL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,18 +15,18 @@ namespace WebApp.Areas.Admin.Controllers
     [Area("Admin")]
     public class StocksController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public StocksController(AppDbContext context)
+        public StocksController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Admin/Stocks
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Stocks.Include(s => s.Industry).Include(s => s.Portfolio).Include(s => s.Region);
-            return View(await appDbContext.ToListAsync());
+            var res = await _uow.Stocks.GetAllAsync(); 
+            return View(res);
         }
 
         // GET: Admin/Stocks/Details/5
@@ -36,11 +37,8 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _context.Stocks
-                .Include(s => s.Industry)
-                .Include(s => s.Portfolio)
-                .Include(s => s.Region)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var stock = await _uow.Stocks.FirstOrDefaultAsync(id.Value);
+            
             if (stock == null)
             {
                 return NotFound();
@@ -52,9 +50,6 @@ namespace WebApp.Areas.Admin.Controllers
         // GET: Admin/Stocks/Create
         public IActionResult Create()
         {
-            ViewData["IndustryId"] = new SelectList(_context.Industries, "Id", "Name");
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name");
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent");
             return View();
         }
 
@@ -68,13 +63,11 @@ namespace WebApp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 stock.Id = Guid.NewGuid();
-                _context.Add(stock);
-                await _context.SaveChangesAsync();
+                _uow.Stocks.Add(stock);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndustryId"] = new SelectList(_context.Industries, "Id", "Name", stock.IndustryId);
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", stock.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", stock.RegionId);
+
             return View(stock);
         }
 
@@ -86,14 +79,11 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _uow.Stocks.FirstOrDefaultAsync(id.Value);
             if (stock == null)
             {
                 return NotFound();
             }
-            ViewData["IndustryId"] = new SelectList(_context.Industries, "Id", "Name", stock.IndustryId);
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", stock.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", stock.RegionId);
             return View(stock);
         }
 
@@ -113,12 +103,12 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(stock);
-                    await _context.SaveChangesAsync();
+                    _uow.Stocks.Update(stock);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StockExists(stock.Id))
+                    if (!await StockExists(stock.Id))
                     {
                         return NotFound();
                     }
@@ -129,9 +119,6 @@ namespace WebApp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndustryId"] = new SelectList(_context.Industries, "Id", "Name", stock.IndustryId);
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", stock.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", stock.RegionId);
             return View(stock);
         }
 
@@ -143,11 +130,8 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _context.Stocks
-                .Include(s => s.Industry)
-                .Include(s => s.Portfolio)
-                .Include(s => s.Region)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var stock = await _uow.Stocks
+                .FirstOrDefaultAsync(id.Value);
             if (stock == null)
             {
                 return NotFound();
@@ -161,15 +145,14 @@ namespace WebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
-            _context.Stocks.Remove(stock);
-            await _context.SaveChangesAsync();
+            await _uow.Stocks.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StockExists(Guid id)
+        private async Task<bool> StockExists(Guid id)
         {
-            return _context.Stocks.Any(e => e.Id == id);
+            return await _uow.Stocks.ExistsAsync(id);
         }
     }
 }

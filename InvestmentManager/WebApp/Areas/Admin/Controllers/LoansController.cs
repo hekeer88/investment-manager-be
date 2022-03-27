@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.DAL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,18 +15,18 @@ namespace WebApp.Areas.Admin.Controllers
     [Area("Admin")]
     public class LoansController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public LoansController(AppDbContext context)
+        public LoansController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Admin/Loans
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Loans.Include(l => l.Portfolio).Include(l => l.Region);
-            return View(await appDbContext.ToListAsync());
+            var res = await _uow.Loans.GetAllAsync(); 
+            return View(res);
         }
 
         // GET: Admin/Loans/Details/5
@@ -36,10 +37,8 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.Portfolio)
-                .Include(l => l.Region)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var loan = await _uow.Loans.FirstOrDefaultAsync(id.Value);
+            
             if (loan == null)
             {
                 return NotFound();
@@ -51,8 +50,6 @@ namespace WebApp.Areas.Admin.Controllers
         // GET: Admin/Loans/Create
         public IActionResult Create()
         {
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name");
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent");
             return View();
         }
 
@@ -66,12 +63,10 @@ namespace WebApp.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 loan.Id = Guid.NewGuid();
-                _context.Add(loan);
-                await _context.SaveChangesAsync();
+                _uow.Loans.Add(loan);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", loan.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", loan.RegionId);
             return View(loan);
         }
 
@@ -83,13 +78,11 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans.FindAsync(id);
+            var loan = await _uow.Loans.FirstOrDefaultAsync(id.Value);
             if (loan == null)
             {
                 return NotFound();
             }
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", loan.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", loan.RegionId);
             return View(loan);
         }
 
@@ -109,12 +102,12 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(loan);
-                    await _context.SaveChangesAsync();
+                    _uow.Loans.Update(loan);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LoanExists(loan.Id))
+                    if (!await LoanExists(loan.Id))
                     {
                         return NotFound();
                     }
@@ -125,8 +118,6 @@ namespace WebApp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PortfolioId"] = new SelectList(_context.Portfolios, "Id", "Name", loan.PortfolioId);
-            ViewData["RegionId"] = new SelectList(_context.Regions, "Id", "Continent", loan.RegionId);
             return View(loan);
         }
 
@@ -138,10 +129,9 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.Portfolio)
-                .Include(l => l.Region)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var loan = await _uow.Loans
+                .FirstOrDefaultAsync(id.Value);
+ 
             if (loan == null)
             {
                 return NotFound();
@@ -155,15 +145,14 @@ namespace WebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var loan = await _context.Loans.FindAsync(id);
-            _context.Loans.Remove(loan);
-            await _context.SaveChangesAsync();
+            await _uow.Loans.RemoveAsync(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LoanExists(Guid id)
+        private async Task<bool> LoanExists(Guid id)
         {
-            return _context.Loans.Any(e => e.Id == id);
+            return await _uow.Loans.ExistsAsync(id);
         }
     }
 }

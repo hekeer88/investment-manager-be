@@ -6,4 +6,5 @@ public interface IAppUnitOfWork : IUnitOfWork
 {
     IPortfolioRepository Portfolios { get; }
     IStockRepository Stocks { get; }
+    ILoanRepository Loans { get; }
 }

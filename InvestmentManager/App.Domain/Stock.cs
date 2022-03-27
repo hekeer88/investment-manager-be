@@ -19,7 +19,7 @@ public class Stock : DomainEntityMetaId
     public ICollection<Price> Prices { get; set; } = new List<Price>();
     public ICollection<Transaction>? Transactions { get; set; }
     
-    public Guid RegionId { get; set; }
+    public Guid? RegionId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Region))]
     public Region? Region { get; set; }
     public Guid PortfolioId { get; set; }

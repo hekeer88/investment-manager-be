@@ -16,23 +16,19 @@ namespace WebApp.Areas.Admin.Controllers
     public class PortfoliosController : Controller
     {
         private readonly IAppUnitOfWork _uow;
-
         
-        // changes for using REPO
         public PortfoliosController(IAppUnitOfWork uow)
         {
             _uow = uow;
         }
-
-        // changes for using REPO
+        
         // GET: Admin/Portfolios
         public async Task<IActionResult> Index()
         {
             var res = await _uow.Portfolios.GetAllAsync(); 
             return View(res);
         }
-
-        // changes for using REPO
+        
         // GET: Admin/Portfolios/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
@@ -50,15 +46,13 @@ namespace WebApp.Areas.Admin.Controllers
 
             return View(portfolio);
         }
-
-        // changes for using REPO
+        
         // GET: Admin/Portfolios/Create
         public IActionResult Create()
         {
             return View();
         }
-
-        // REPO CHANGES
+        
         // POST: Admin/Portfolios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -145,8 +139,7 @@ namespace WebApp.Areas.Admin.Controllers
 
             return View(portfolio);
         }
-
-        // REPO
+        
         // POST: Admin/Portfolios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

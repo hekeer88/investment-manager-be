@@ -2,10 +2,8 @@
 
 namespace Base.Contracts.DAL;
 
-
-// kas peaks siis meta interface kasutama??
 public interface IEntityRepository<TEntity> : IEntityRepository<TEntity, Guid>
-where TEntity: class, IDomainEntityId
+where TEntity : class, IDomainEntityId
 {
 }
 

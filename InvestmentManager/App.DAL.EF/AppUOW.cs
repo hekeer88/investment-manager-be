@@ -18,6 +18,9 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
     // selliselt teha k6ik repod
     private  IStockRepository? _stocks;
     public virtual IStockRepository Stocks => _stocks ??= new StockRepository(UOWDbContext);
+    
+    private  ILoanRepository? _loans;
+    public virtual ILoanRepository Loans => _loans ??= new LoanRepository(UOWDbContext);
 
     
 }
