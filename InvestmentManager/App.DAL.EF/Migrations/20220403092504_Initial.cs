@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DAL.App.Migrations
+namespace App.DAL.EF.Migrations
 {
     public partial class Initial : Migration
     {
@@ -16,6 +16,7 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DisplayName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
@@ -30,6 +31,8 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -55,8 +58,8 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Country = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
-                    Continent = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
+                    Country = table.Column<LangStr>(type: "jsonb", nullable: false),
+                    Continent = table.Column<LangStr>(type: "jsonb", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
@@ -178,7 +181,7 @@ namespace DAL.App.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<LangStr>(type: "jsonb", maxLength: 32, nullable: false),
+                    Name = table.Column<LangStr>(type: "jsonb", nullable: false),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -289,7 +292,7 @@ namespace DAL.App.Migrations
                     Company = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     Ticker = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
                     Comment = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    RegionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegionId = table.Column<Guid>(type: "uuid", nullable: true),
                     PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
                     IndustryId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),

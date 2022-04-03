@@ -10,10 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DAL.App.Migrations
+namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220318151855_Initial")]
+    [Migration("20220403092504_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,11 @@ namespace DAL.App.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -105,6 +110,16 @@ namespace DAL.App.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -169,7 +184,6 @@ namespace DAL.App.Migrations
 
                     b.Property<LangStr>("Name")
                         .IsRequired()
-                        .HasMaxLength(32)
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -336,12 +350,10 @@ namespace DAL.App.Migrations
 
                     b.Property<LangStr>("Continent")
                         .IsRequired()
-                        .HasMaxLength(32)
                         .HasColumnType("jsonb");
 
                     b.Property<LangStr>("Country")
                         .IsRequired()
-                        .HasMaxLength(32)
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("CreatedAt")
@@ -391,7 +403,7 @@ namespace DAL.App.Migrations
                     b.Property<Guid>("PortfolioId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RegionId")
+                    b.Property<Guid?>("RegionId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Ticker")
@@ -650,8 +662,7 @@ namespace DAL.App.Migrations
                     b.HasOne("App.Domain.Region", "Region")
                         .WithMany("Stocks")
                         .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Industry");
 
