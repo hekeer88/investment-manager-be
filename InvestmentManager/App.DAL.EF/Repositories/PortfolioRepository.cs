@@ -16,4 +16,14 @@ public class PortfolioRepository : BaseEntityRepository<Portfolio, AppDbContext>
         var query = CreateQuery(noTracking);
         return await query.Where(a => a.Name.ToUpper().Contains(name.ToUpper())).ToListAsync();
     }
+    
+    public async Task<IEnumerable<Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
+    {
+        var query = CreateQuery(noTracking);
+        query = query
+            .Include(u => u.AppUser)
+            .Where(m => m.AppUserId == userId);
+
+        return await query.ToListAsync();
+    }
 }

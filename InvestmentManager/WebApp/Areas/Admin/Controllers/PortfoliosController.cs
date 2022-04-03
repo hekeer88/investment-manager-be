@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Extensions;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Areas.Admin.Controllers
@@ -27,7 +28,7 @@ namespace WebApp.Areas.Admin.Controllers
         // GET: Admin/Portfolios
         public async Task<IActionResult> Index()
         {
-            var res = await _uow.Portfolios.GetAllAsync(); 
+            var res = await _uow.Portfolios.GetAllAsync(User.GetUserId());
             return View(res);
         }
         
@@ -60,10 +61,13 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,AppUserId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Portfolio portfolio)
+        public async Task<IActionResult> Create(Portfolio portfolio)
         {
             if (ModelState.IsValid)
             {
+                portfolio.AppUserId = User.GetUserId();
+                    
+                    
                 portfolio.Id = Guid.NewGuid();
                 _uow.Portfolios.Add(portfolio);
 
@@ -94,13 +98,15 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,AppUserId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Portfolio portfolio)
+        public async Task<IActionResult> Edit(Guid id, Portfolio portfolio)
         {
             if (id != portfolio.Id)
             {
                 return NotFound();
             }
 
+            portfolio.AppUserId = User.GetUserId();
+            
             if (ModelState.IsValid)
             {
                 try
