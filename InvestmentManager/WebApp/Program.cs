@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using App.Contracts.DAL;
 using App.DAL.EF;
 using App.DAL.EF.Repositories;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using WebApp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("NpgsqlConnecti
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
 /*
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -30,6 +33,26 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     .AddDefaultUI()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services
+    .AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.SlidingExpiration = true;
+    })
+    .AddJwtBearer(cfg =>
+    {
+        cfg.RequireHttpsMetadata = false;
+        cfg.SaveToken = true;
+        cfg.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidAudience = builder.Configuration["JWT:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            ClockSkew = TimeSpan.Zero // remove delay of token when expire
+        };
+    });
+
 
 builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
 

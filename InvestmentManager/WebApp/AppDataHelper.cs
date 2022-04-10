@@ -64,7 +64,7 @@ public static class AppDataHelper
                     var identityResult = roleManager.CreateAsync(new AppRole()
                     {
                         Name = roleInfo.name,
-                        // DisplayName = roleInfo.displayName
+                        DisplayName = roleInfo.displayName
                     }).Result;
                     if (!identityResult.Succeeded)
                     {
