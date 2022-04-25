@@ -11,10 +11,10 @@ public static class IdentityExtensions
     public static Guid GetUserId(this ClaimsPrincipal user) => GetUserId<Guid>(user);
     public static TKeyType GetUserId<TKeyType>(this ClaimsPrincipal user)
     {
-        if (typeof(TKeyType) != typeof(Guid) 
-            // ||
-            // typeof(TKeyType) != typeof(string) ||
-            // typeof(TKeyType) != typeof(int)
+        if (
+            typeof(TKeyType) != typeof(Guid) &&
+            typeof(TKeyType) != typeof(string) &&
+            typeof(TKeyType) != typeof(int)
            )
         {
             throw new ApplicationException($"This type of User id {typeof(TKeyType).Name} is not supported!");

@@ -1,19 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using App.Domain.identity;
+using System.ComponentModel.DataAnnotations;
+using App.DAL.DTO.Identity;
+using App.Resources.App.Domain;
+using Base.Contracts.Domain;
 using Base.Domain;
 
-namespace App.Domain;
+namespace App.DAL.DTO;
 
-public class Portfolio : DomainEntityMetaId
+public class Portfolio : DomainEntityId
 {
-    
     [MaxLength(64)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name = nameof(Name))]
     public string Name { get; set; } = default!;
     
     [MaxLength(512)]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))] // can be remove for REST API, only webcontroller use it
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
     public string? Description { get; set; } 
     
     public ICollection<Stock>? Stocks { get; set; }
@@ -24,6 +24,5 @@ public class Portfolio : DomainEntityMetaId
     public Guid? AppUserId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(AppUser))]
     public AppUser? AppUser { get; set; }
-    
-    
+
 }

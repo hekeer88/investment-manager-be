@@ -1,11 +1,10 @@
-﻿using App.Domain;
-using Base.Contracts.DAL;
+﻿using Base.Contracts.DAL;
 
 namespace App.Contracts.DAL;
 
-public interface IPortfolioRepository : IEntityRepository<Portfolio>
+public interface IPortfolioRepository : IEntityRepository<App.DAL.DTO.Portfolio>
 {
-    Task<IEnumerable<Portfolio>> GetAllByNameAsync(string name, bool noTracking = true);
+    Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllByNameAsync(string name, bool noTracking = true);
     
-    Task<IEnumerable<Portfolio>> GetAllAsync(Guid userId, bool noTracking = true);
+    Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true);
 }

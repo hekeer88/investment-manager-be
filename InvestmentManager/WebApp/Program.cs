@@ -20,6 +20,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
+builder.Services.AddAutoMapper(
+    typeof(App.DAL.EF.AutomapperConfig)
+    // typeof(App.BLL.AutomapperConfig)
+);
+
+
+
 /*
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AppDbContext>();

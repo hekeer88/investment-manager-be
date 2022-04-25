@@ -58,7 +58,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Loan loan)
+        public async Task<IActionResult> Create([Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Loan loan)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Loan loan)
+        public async Task<IActionResult> Edit(Guid id, [Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Loan loan)
         {
             if (id != loan.Id)
             {

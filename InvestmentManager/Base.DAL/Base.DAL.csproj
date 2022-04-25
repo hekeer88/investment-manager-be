@@ -8,11 +8,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Base.Contracts.Base\Base.Contracts.Base.csproj" />
-      <ProjectReference Include="..\Base.Contracts.DAL\Base.Contracts.DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
     </ItemGroup>
 
 </Project>

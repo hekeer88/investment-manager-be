@@ -1,4 +1,4 @@
-@model IEnumerable<App.Domain.Loan>
+@model IEnumerable<App.DAL.DTO.Loan>
 
 @{
     ViewData["Title"] = "Index";
@@ -45,18 +45,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Region)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -93,21 +81,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Portfolio.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Region.Continent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
+            @* <td> *@
+            @*     @Html.DisplayFor(modelItem => item.Region.Continent) *@
+            @* </td> *@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

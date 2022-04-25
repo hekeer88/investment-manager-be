@@ -1,4 +1,4 @@
-@model IEnumerable<App.Domain.Stock>
+@model IEnumerable<App.DAL.DTO.Stock>
 
 @{
     ViewData["Title"] = "Index";
@@ -30,18 +30,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Industry)
             </th>
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.CreatedBy) *@
-            @* </th> *@
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.CreatedAt) *@
-            @* </th> *@
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.UpdatedBy) *@
-            @* </th> *@
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.UpdatedAt) *@
-            @* </th> *@
             <th>
                 LastPrice
             </th>
@@ -62,31 +50,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Comment)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Region.Continent)
-            </td>
+            @* <td> *@
+            @*     @Html.DisplayFor(modelItem => item.Region.Continent) *@
+            @* </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Portfolio.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Industry.Name)
-            </td>
             @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.CreatedBy) *@
+            @*     @Html.DisplayFor(modelItem => item.Industry.Name) *@
             @* </td> *@
+
             @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.CreatedAt) *@
+            @*     @item.GetLastPrice(); *@
             @* </td> *@
-            @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.UpdatedBy) *@
-            @* </td> *@
-            @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.UpdatedAt) *@
-            @* </td> *@
-            <td>
-                @item.GetLastPrice();
-            </td>
-            
+            @* *@
             
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

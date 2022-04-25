@@ -1,29 +1,32 @@
 using App.Contracts.DAL;
+using App.DAL.EF.Mappers;
 using App.Domain;
+using Base.Contracts.Base;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.DAL.EF.Repositories;
 
-public class PortfolioRepository : BaseEntityRepository<Portfolio, AppDbContext>, IPortfolioRepository
+public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, App.Domain.Portfolio, AppDbContext>, IPortfolioRepository
 {
-    public PortfolioRepository(AppDbContext dbContext) : base(dbContext)
+    public PortfolioRepository(AppDbContext dbContext, IMapper<App.DAL.DTO.Portfolio, App.Domain.Portfolio> mapper) : base(dbContext, mapper)
     {
     }
     
-    public async Task<IEnumerable<Portfolio>> GetAllByNameAsync(string name, bool noTracking = true)
+    public async Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllByNameAsync(string name, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
-        return await query.Where(a => a.Name.ToUpper().Contains(name.ToUpper())).ToListAsync();
+        return (await query.Where(a => a.Name.ToUpper().Contains(name.ToUpper())).ToListAsync())
+            .Select(x => Mapper.Map(x)!);
     }
     
-    public async Task<IEnumerable<Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
+    public async Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
         query = query
             .Include(u => u.AppUser)
             .Where(m => m.AppUserId == userId);
 
-        return await query.ToListAsync();
+        return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
     }
 }

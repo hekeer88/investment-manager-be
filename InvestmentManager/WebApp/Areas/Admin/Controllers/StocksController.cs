@@ -58,7 +58,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Stock stock)
+        public async Task<IActionResult> Create([Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Stock stock)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Stock stock)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Stock stock)
         {
             if (id != stock.Id)
             {

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using App.Domain;
 using Base.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Portfolio = App.DAL.DTO.Portfolio;
 
 namespace WebApp.Areas.Admin.Controllers
 {
@@ -61,7 +62,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Portfolio portfolio)
+        public async Task<IActionResult> Create(App.DAL.DTO.Portfolio portfolio)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +99,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Portfolio portfolio)
+        public async Task<IActionResult> Edit(Guid id, App.DAL.DTO.Portfolio portfolio)
         {
             if (id != portfolio.Id)
             {
