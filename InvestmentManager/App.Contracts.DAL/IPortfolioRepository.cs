@@ -2,9 +2,14 @@
 
 namespace App.Contracts.DAL;
 
-public interface IPortfolioRepository : IEntityRepository<App.DAL.DTO.Portfolio>
+public interface IPortfolioRepository : IEntityRepository<App.DAL.DTO.Portfolio>, IPortfolioCustom<App.DAL.DTO.Portfolio>
 {
-    Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllByNameAsync(string name, bool noTracking = true);
+}
+
+// TODO: teised repod ka selliseks
+public interface IPortfolioCustom<TEntity>
+{
+    Task<IEnumerable<TEntity>> GetAllByNameAsync(string name, bool noTracking = true);
     
-    Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true);
+    Task<IEnumerable<TEntity>> GetAllAsync(Guid userId, bool noTracking = true);
 }

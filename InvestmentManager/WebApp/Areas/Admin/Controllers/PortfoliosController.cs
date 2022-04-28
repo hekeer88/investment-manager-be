@@ -1,17 +1,11 @@
 #nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Contracts.DAL;
-using App.DAL.EF;
+
+using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
 using Base.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Portfolio = App.DAL.DTO.Portfolio;
+using App.BLL.DTO;
 
 namespace WebApp.Areas.Admin.Controllers
 {
@@ -19,17 +13,17 @@ namespace WebApp.Areas.Admin.Controllers
     [Authorize(Roles = "admin")]
     public class PortfoliosController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
         
-        public PortfoliosController(IAppUnitOfWork uow)
+        public PortfoliosController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
         
         // GET: Admin/Portfolios
         public async Task<IActionResult> Index()
         {
-            var res = await _uow.Portfolios.GetAllAsync(User.GetUserId());
+            var res = await _bll.Portfolios.GetAllAsync(User.GetUserId());
             return View(res);
         }
         
@@ -41,7 +35,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _uow.Portfolios.FirstOrDefaultAsync(id.Value);
+            var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id.Value);
             
             if (portfolio == null)
             {
@@ -62,7 +56,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(App.DAL.DTO.Portfolio portfolio)
+        public async Task<IActionResult> Create(App.BLL.DTO.Portfolio portfolio)
         {
             if (ModelState.IsValid)
             {
@@ -70,9 +64,9 @@ namespace WebApp.Areas.Admin.Controllers
                     
                     
                 portfolio.Id = Guid.NewGuid();
-                _uow.Portfolios.Add(portfolio);
+                _bll.Portfolios.Add(portfolio);
 
-                await _uow.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(portfolio);
@@ -86,7 +80,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _uow.Portfolios.FirstOrDefaultAsync(id.Value);
+            var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id.Value);
             if (portfolio == null)
             {
                 return NotFound();
@@ -99,7 +93,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, App.DAL.DTO.Portfolio portfolio)
+        public async Task<IActionResult> Edit(Guid id, Portfolio portfolio)
         {
             if (id != portfolio.Id)
             {
@@ -112,8 +106,8 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _uow.Portfolios.Update(portfolio);
-                    await _uow.SaveChangesAsync();
+                    _bll.Portfolios.Update(portfolio);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -139,7 +133,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var portfolio = await _uow.Portfolios
+            var portfolio = await _bll.Portfolios
                 .FirstOrDefaultAsync(id.Value);
             if (portfolio == null)
             {
@@ -155,14 +149,14 @@ namespace WebApp.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
        
-            await _uow.Portfolios.RemoveAsync(id);
-            await _uow.SaveChangesAsync();
+            await _bll.Portfolios.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> PortfolioExists(Guid id)
         {
-            return await _uow.Portfolios.ExistsAsync(id);
+            return await _bll.Portfolios.ExistsAsync(id);
         }
     }
 }

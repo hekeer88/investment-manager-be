@@ -1,9 +1,13 @@
+using App.BLL.Mappers;
+using App.BLL.Services;
 using App.Contracts.BLL;
 using App.Contracts.BLL.Services;
 using App.Contracts.DAL;
-using App.DAL.EF.Mappers;
+using AutoMapper;
 using Base.BLL;
 using Base.Contracts.Base;
+using LoanMapper = App.DAL.EF.Mappers.LoanMapper;
+using StockMapper = App.DAL.EF.Mappers.StockMapper;
 
 namespace App.BLL;
 
@@ -12,7 +16,7 @@ public class AppBLL : BaseBll<IAppUnitOfWork>, IAppBLL
     protected IAppUnitOfWork UnitOfWork;
     private readonly AutoMapper.IMapper _mapper;
 
-    public AppBLL(IAppUnitOfWork unitOfWork, IMapper<,> mapper)
+    public AppBLL(IAppUnitOfWork unitOfWork, IMapper mapper)
     {
         UnitOfWork = unitOfWork;
         _mapper = mapper;
@@ -27,25 +31,19 @@ public class AppBLL : BaseBll<IAppUnitOfWork>, IAppBLL
     {
         return UnitOfWork.SaveChanges();
     }
-
-    private IMeetingPortfolio? _meetings;
-
-    public IMeetingService Meetings =>
-        _meetings ??= new MeetingService(UnitOfWork.Meetings, new MeetingMapper(_mapper));
-
-
-    private IMeetingOptionService? _meetingOptions;
-
-    public IMeetingOptionService MeetingOptions =>
-        _meetingOptions ??= new MeetingOptionService(UnitOfWork.MeetingOptions, new MeetingOptionMapper(_mapper));
-
-    
     
     private IPortfolioService? _portfolios;
+    
     public IPortfolioService Portfolios =>
         _portfolios ??= new PortfolioService(UnitOfWork.Portfolios, new PortfolioMapper(_mapper));
     
     
     private IStockService? _socks;
+    public IStockService Stocks =>
+        _socks ??= new StockService(UnitOfWork.Stocks, new Mappers.StockMapper(_mapper));
+    
     private ILoanService? _loans;
+    public ILoanService Loans =>
+        _loans ??= new LoanService(UnitOfWork.Loans, new Mappers.LoanMapper(_mapper));
+    
 }
