@@ -3,29 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.Contracts.DAL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Loan = App.BLL.DTO.Loan;
 
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class LoansController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public LoansController(IAppUnitOfWork uow)
+        public LoansController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: Admin/Loans
         public async Task<IActionResult> Index()
         {
-            var res = await _uow.Loans.GetAllAsync(); 
+            var res = await _bll.Loans.GetAllAsync(); 
             return View(res);
         }
 
@@ -37,7 +39,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _uow.Loans.FirstOrDefaultAsync(id.Value);
+            var loan = await _bll.Loans.FirstOrDefaultAsync(id.Value);
             
             if (loan == null)
             {
@@ -58,13 +60,13 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Loan loan)
+        public async Task<IActionResult> Create([Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Loan loan)
         {
             if (ModelState.IsValid)
             {
                 loan.Id = Guid.NewGuid();
-                _uow.Loans.Add(loan);
-                await _uow.SaveChangesAsync();
+                _bll.Loans.Add(loan);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(loan);
@@ -78,7 +80,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _uow.Loans.FirstOrDefaultAsync(id.Value);
+            var loan = await _bll.Loans.FirstOrDefaultAsync(id.Value);
             if (loan == null)
             {
                 return NotFound();
@@ -91,7 +93,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Loan loan)
+        public async Task<IActionResult> Edit(Guid id, [Bind("LoanName,BorrowerName,ContractNumber,Collateral,LoanDate,EndDate,Amount,ScheduleType,Interest,PortfolioId,RegionId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Loan loan)
         {
             if (id != loan.Id)
             {
@@ -102,8 +104,8 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _uow.Loans.Update(loan);
-                    await _uow.SaveChangesAsync();
+                    _bll.Loans.Update(loan);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +131,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var loan = await _uow.Loans
+            var loan = await _bll.Loans
                 .FirstOrDefaultAsync(id.Value);
  
             if (loan == null)
@@ -145,14 +147,14 @@ namespace WebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Loans.RemoveAsync(id);
-            await _uow.SaveChangesAsync();
+            await _bll.Loans.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> LoanExists(Guid id)
         {
-            return await _uow.Loans.ExistsAsync(id);
+            return await _bll.Loans.ExistsAsync(id);
         }
     }
 }

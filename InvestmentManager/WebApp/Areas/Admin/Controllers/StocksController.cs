@@ -3,29 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.Contracts.DAL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Stock = App.BLL.DTO.Stock;
 
 namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class StocksController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public StocksController(IAppUnitOfWork uow)
+        public StocksController(IAppBLL bll)
         {
-            _uow = uow;
+            _bll = bll;
         }
 
         // GET: Admin/Stocks
         public async Task<IActionResult> Index()
         {
-            var res = await _uow.Stocks.GetAllAsync(); 
+            var res = await _bll.Stocks.GetAllAsync(); 
             return View(res);
         }
 
@@ -37,7 +39,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _uow.Stocks.FirstOrDefaultAsync(id.Value);
+            var stock = await _bll.Stocks.FirstOrDefaultAsync(id.Value);
             
             if (stock == null)
             {
@@ -58,13 +60,13 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Stock stock)
+        public async Task<IActionResult> Create([Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Stock stock)
         {
             if (ModelState.IsValid)
             {
                 stock.Id = Guid.NewGuid();
-                _uow.Stocks.Add(stock);
-                await _uow.SaveChangesAsync();
+                _bll.Stocks.Add(stock);
+                await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -79,7 +81,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _uow.Stocks.FirstOrDefaultAsync(id.Value);
+            var stock = await _bll.Stocks.FirstOrDefaultAsync(id.Value);
             if (stock == null)
             {
                 return NotFound();
@@ -92,7 +94,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] App.DAL.DTO.Stock stock)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Company,Ticker,Comment,RegionId,PortfolioId,IndustryId,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt,Id")] Stock stock)
         {
             if (id != stock.Id)
             {
@@ -103,8 +105,8 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 try
                 {
-                    _uow.Stocks.Update(stock);
-                    await _uow.SaveChangesAsync();
+                    _bll.Stocks.Update(stock);
+                    await _bll.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +132,7 @@ namespace WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var stock = await _uow.Stocks
+            var stock = await _bll.Stocks
                 .FirstOrDefaultAsync(id.Value);
             if (stock == null)
             {
@@ -145,14 +147,14 @@ namespace WebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _uow.Stocks.RemoveAsync(id);
-            await _uow.SaveChangesAsync();
+            await _bll.Stocks.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> StockExists(Guid id)
         {
-            return await _uow.Stocks.ExistsAsync(id);
+            return await _bll.Stocks.ExistsAsync(id);
         }
     }
 }
