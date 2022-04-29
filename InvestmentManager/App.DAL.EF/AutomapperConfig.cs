@@ -11,6 +11,6 @@ public class AutomapperConfig : Profile
         CreateMap<Portfolio, App.Domain.Portfolio>().ReverseMap();
         CreateMap<Stock, App.Domain.Stock>().ReverseMap();
         CreateMap<Loan, App.Domain.Loan>().ReverseMap();
-        CreateMap<AppUser, App.Domain.Identity.AppUser>().ReverseMap();
+        CreateMap<AppUser, App.Domain.identity.AppUser>().ReverseMap();
     }
 }
