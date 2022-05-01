@@ -1,39 +1,49 @@
 #nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Contracts.DAL;
+
+using App.Contracts.BLL;
 using App.DAL.EF;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion( "1.0" )]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PortfoliosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public PortfoliosController(AppDbContext context)
+        public PortfoliosController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Portfolios
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<App.BLL.DTO.Portfolio>), 200)]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Portfolio>>> GetPortfolios()
+        // TODO> ProducesRepsponse, meeteodi return jne peaks olema vist DTO.BLL.portfolio
+        public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetPortfolios()
         {
-            return await _context.Portfolios.ToListAsync();
+            return await _bll.Portfolios.GetAllAsync();
+            
         }
 
         // GET: api/Portfolios/5
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Portfolio>> GetPortfolio(Guid id)
         {
@@ -81,12 +91,29 @@ namespace WebApp.ApiControllers
         // POST: api/Portfolios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Portfolio>> PostPortfolio(Portfolio portfolio)
+        [AllowAnonymous]
+        // TODO: from body is questionable, and olso Portfolia is domain.portfolio but should use some DTO
+        public async Task<ActionResult<Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
         {
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            
             _context.Portfolios.Add(portfolio);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPortfolio", new { id = portfolio.Id }, portfolio);
+            
+            // TODO: change return value for every post return like here, addition to id, add version,
+            // also add this if control in the beginning of this method
+            return CreatedAtAction(
+                "GetPortfolio",
+                new
+                {
+                    id = portfolio.Id,
+                    version = HttpContext.GetRequestedApiVersion()!.ToString()
+                },
+                portfolio);
         }
 
         // DELETE: api/Portfolios/5

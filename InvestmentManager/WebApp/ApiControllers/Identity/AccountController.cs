@@ -15,8 +15,10 @@ using WebApp.DTO.Identity;
 
 namespace WebApp.ApiControllers.Identity;
 
-[Route("api/identity/[controller]/[action]")]
 [ApiController]
+[ApiVersion( "1.0" )]
+[Route("api/v{version:apiVersion}/identity/[controller]/[action]")]
+// [Route("api/identity/[controller]/[action]")] see vana
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<AppUser> _signInManager;
@@ -36,6 +38,12 @@ public class AccountController : ControllerBase
         _context = context;
     }
 
+    /// <summary>
+    /// Login into the rest backend - generates JWT to be included in
+    /// Authorize: Bearer xyz
+    /// </summary>
+    /// <param name="loginData">Supply email and password</param>
+    /// <returns>JWT and refresh token</returns>
     [HttpPost] // allow only post here
     public async Task<ActionResult<JwtResponse>> LogIn([FromBody] Login loginData)
     {
@@ -85,7 +93,7 @@ public class AccountController : ControllerBase
         return Ok(res);
     }
 
-
+    [HttpPost]
     public async Task<ActionResult<JwtResponse>> Register(Register registrationData)
     {
         // verify user

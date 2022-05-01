@@ -12,4 +12,5 @@ public interface IPortfolioCustom<TEntity>
     Task<IEnumerable<TEntity>> GetAllByNameAsync(string name, bool noTracking = true);
     
     Task<IEnumerable<TEntity>> GetAllAsync(Guid userId, bool noTracking = true);
+    
 }
