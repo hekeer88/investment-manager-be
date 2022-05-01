@@ -66,7 +66,7 @@ public class BaseEntityService<TBllEntity, TDalEntity, TRepository, TKey> : IEnt
     {
         return Repository.Exists(id);
     }
-
+    
     public async Task<TBllEntity?> FirstOrDefaultAsync(TKey id, bool noTracking = true)
     {
         return Mapper.Map(await Repository.FirstOrDefaultAsync(id, noTracking));

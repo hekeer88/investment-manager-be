@@ -2,6 +2,7 @@
 using Base.Contracts.Base;
 using Base.Contracts.DAL;
 using Base.Contracts.Domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Base.DAL.EF;
@@ -108,6 +109,7 @@ public class BaseEntityRepository<TDalEntity, TDomainEntity, TKey, TDbContext> :
     {
         return RepoDbSet.Any(a => a.Id.Equals(id));
     }
+    
 
     public virtual async Task<TDalEntity?> FirstOrDefaultAsync(TKey id, bool noTracking = true)
     {
@@ -142,4 +144,6 @@ public class BaseEntityRepository<TDalEntity, TDomainEntity, TKey, TDbContext> :
 
         return Remove(entity);
     }
+
+
 }

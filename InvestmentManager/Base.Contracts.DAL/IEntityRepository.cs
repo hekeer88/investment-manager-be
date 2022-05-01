@@ -1,4 +1,5 @@
 ﻿using Base.Contracts.Domain;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Base.Contracts.DAL;
 
@@ -21,11 +22,13 @@ public interface IEntityRepository<TEntity, TKey>
     TEntity? FirstOrDefault(TKey id, bool noTracking = true);
     IEnumerable<TEntity> GetAll(bool noTracking = true);
     bool Exists(TKey id);
-    
+
     // async 
     Task<TEntity?> FirstOrDefaultAsync(TKey id, bool noTracking = true);
     Task<IEnumerable<TEntity>> GetAllAsync(bool noTracking = true);
     Task<bool> ExistsAsync(TKey id);
     Task<TEntity> RemoveAsync(TKey id);
-
+    
+   
+    // Task<ActionResult<TEntity>> FindAsync(TKey id, bool noTracking = true);
 }

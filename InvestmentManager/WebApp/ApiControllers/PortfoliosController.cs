@@ -8,6 +8,7 @@ using App.Domain;
 using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Portfolio = App.BLL.DTO.Portfolio;
 
 namespace WebApp.ApiControllers
 {
@@ -17,7 +18,6 @@ namespace WebApp.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PortfoliosController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IAppBLL _bll;
 
         public PortfoliosController(IAppBLL bll)
@@ -31,7 +31,6 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(typeof(IEnumerable<App.BLL.DTO.Portfolio>), 200)]
         [AllowAnonymous]
         [HttpGet]
-        // TODO> ProducesRepsponse, meeteodi return jne peaks olema vist DTO.BLL.portfolio
         public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetPortfolios()
         {
             return await _bll.Portfolios.GetAllAsync();
@@ -41,13 +40,13 @@ namespace WebApp.ApiControllers
         // GET: api/Portfolios/5
         [Produces("application/json")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(App.BLL.DTO.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Portfolio>> GetPortfolio(Guid id)
+        public async Task<ActionResult<App.BLL.DTO.Portfolio>> GetPortfolio(Guid id)
         {
-            var portfolio = await _context.Portfolios.FindAsync(id);
+            var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id);
 
             if (portfolio == null)
             {
@@ -60,22 +59,24 @@ namespace WebApp.ApiControllers
         // PUT: api/Portfolios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPortfolio(Guid id, Portfolio portfolio)
+        public async Task<IActionResult> PutPortfolio(Guid id, App.BLL.DTO.Portfolio portfolio)
         {
             if (id != portfolio.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(portfolio).State = EntityState.Modified;
+            _bll.Portfolios.Add(portfolio);
+
+            // _context.Entry(portfolio).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PortfolioExists(id))
+                if (!await PortfolioExists(id))
                 {
                     return NotFound();
                 }
@@ -93,18 +94,19 @@ namespace WebApp.ApiControllers
         [HttpPost]
         [AllowAnonymous]
         // TODO: from body is questionable, and olso Portfolia is domain.portfolio but should use some DTO
-        public async Task<ActionResult<Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
+        public async Task<ActionResult<App.BLL.DTO.Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
         {
             if (HttpContext.GetRequestedApiVersion() == null)
             {
                 return BadRequest("Api version is mandatory");
             }
             
-            _context.Portfolios.Add(portfolio);
-            await _context.SaveChangesAsync();
+            _bll.Portfolios.Add(portfolio);
+            await _bll.SaveChangesAsync();
 
             
-            // TODO: change return value for every post return like here, addition to id, add version,
+            // TODO: for swagger change return value for every post return like here,
+            // addition to id, add version,
             // also add this if control in the beginning of this method
             return CreatedAtAction(
                 "GetPortfolio",
@@ -117,24 +119,22 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Portfolios/5
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.BLL.DTO.Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePortfolio(Guid id)
         {
-            var portfolio = await _context.Portfolios.FindAsync(id);
-            if (portfolio == null)
-            {
-                return NotFound();
-            }
-
-            _context.Portfolios.Remove(portfolio);
-            await _context.SaveChangesAsync();
-
+            await _bll.Portfolios.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool PortfolioExists(Guid id)
+        private async Task<bool> PortfolioExists(Guid id)
         {
-            return _context.Portfolios.Any(e => e.Id == id);
+            return await _bll.Portfolios.ExistsAsync(id);
         }
     }
 }
