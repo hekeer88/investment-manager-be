@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,25 +19,25 @@ namespace WebApp.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LoansController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public LoansController(AppDbContext context)
+        public LoansController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Loans
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Loan>>> GetLoans()
+        public async Task<IEnumerable<App.BLL.DTO.Loan>> GetLoans()
         {
-            return await _context.Loans.ToListAsync();
+            return await _bll.Loans.GetAllAsync();
         }
 
         // GET: api/Loans/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Loan>> GetLoan(Guid id)
+        public async Task<ActionResult<App.BLL.DTO.Loan>> GetLoan(Guid id)
         {
-            var loan = await _context.Loans.FindAsync(id);
+            var loan = await _bll.Loans.FirstOrDefaultAsync(id);
 
             if (loan == null)
             {
@@ -49,22 +50,22 @@ namespace WebApp.ApiControllers
         // PUT: api/Loans/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLoan(Guid id, Loan loan)
+        public async Task<IActionResult> PutLoan(Guid id, App.BLL.DTO.Loan loan)
         {
             if (id != loan.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(loan).State = EntityState.Modified;
+            _bll.Loans.Add(loan);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LoanExists(id))
+                if (!await LoanExists(id))
                 {
                     return NotFound();
                 }
@@ -80,10 +81,10 @@ namespace WebApp.ApiControllers
         // POST: api/Loans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Loan>> PostLoan(Loan loan)
+        public async Task<ActionResult<App.BLL.DTO.Loan>> PostLoan(App.BLL.DTO.Loan loan)
         {
-            _context.Loans.Add(loan);
-            await _context.SaveChangesAsync();
+            _bll.Loans.Add(loan);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetLoan", new { id = loan.Id }, loan);
         }
@@ -92,21 +93,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLoan(Guid id)
         {
-            var loan = await _context.Loans.FindAsync(id);
-            if (loan == null)
-            {
-                return NotFound();
-            }
-
-            _context.Loans.Remove(loan);
-            await _context.SaveChangesAsync();
-
+            await _bll.Loans.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool LoanExists(Guid id)
+        private async Task<bool> LoanExists(Guid id)
         {
-            return _context.Loans.Any(e => e.Id == id);
+            return await _bll.Loans.ExistsAsync(id);
         }
     }
 }

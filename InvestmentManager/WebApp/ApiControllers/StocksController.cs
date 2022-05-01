@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,25 +19,25 @@ namespace WebApp.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StocksController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public StocksController(AppDbContext context)
+        public StocksController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Stocks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Stock>>> GetStocks()
+        public async Task<IEnumerable<App.BLL.DTO.Stock>> GetStocks()
         {
-            return await _context.Stocks.ToListAsync();
+            return await _bll.Stocks.GetAllAsync();
         }
 
         // GET: api/Stocks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Stock>> GetStock(Guid id)
+        public async Task<ActionResult<App.BLL.DTO.Stock>> GetStock(Guid id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _bll.Stocks.FirstOrDefaultAsync(id);
 
             if (stock == null)
             {
@@ -49,22 +50,22 @@ namespace WebApp.ApiControllers
         // PUT: api/Stocks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStock(Guid id, Stock stock)
+        public async Task<IActionResult> PutStock(Guid id, App.BLL.DTO.Stock stock)
         {
             if (id != stock.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(stock).State = EntityState.Modified;
+            _bll.Stocks.Add(stock);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StockExists(id))
+                if (!await StockExists(id))
                 {
                     return NotFound();
                 }
@@ -80,10 +81,15 @@ namespace WebApp.ApiControllers
         // POST: api/Stocks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Stock>> PostStock(Stock stock)
+        public async Task<ActionResult<App.BLL.DTO.Stock>> PostStock(App.BLL.DTO.Stock stock)
         {
-            _context.Stocks.Add(stock);
-            await _context.SaveChangesAsync();
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            
+            _bll.Stocks.Add(stock);
+            await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetStock", new { id = stock.Id }, stock);
         }
@@ -92,21 +98,14 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStock(Guid id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
-            if (stock == null)
-            {
-                return NotFound();
-            }
-
-            _context.Stocks.Remove(stock);
-            await _context.SaveChangesAsync();
-
+            await _bll.Stocks.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool StockExists(Guid id)
+        private async Task<bool> StockExists(Guid id)
         {
-            return _context.Stocks.Any(e => e.Id == id);
+            return await _bll.Stocks.ExistsAsync(id);
         }
     }
 }
