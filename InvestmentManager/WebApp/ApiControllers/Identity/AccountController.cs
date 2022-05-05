@@ -18,7 +18,7 @@ namespace WebApp.ApiControllers.Identity;
 [ApiController]
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/identity/[controller]/[action]")]
-// [Route("api/identity/[controller]/[action]")] see vana
+// [Route("api/identity/[controller]/[action]")] //see vana
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<AppUser> _signInManager;
@@ -73,7 +73,28 @@ public class AccountController : ControllerBase
             await Task.Delay(_rnd.Next(100, 1000));
             return NotFound("User/Password problem");
         }
-
+        
+        appUser.RefreshTokens = await _context
+            .Entry(appUser)
+            .Collection(a => a.RefreshTokens!)
+            .Query()
+            .Where(t => t.AppUserId == appUser.Id)
+            .ToListAsync();
+        
+        foreach (var userRefreshToken in appUser.RefreshTokens)
+        {
+            if (userRefreshToken.TokenExpirationDateTime < DateTime.UtcNow &&
+                userRefreshToken.PreviousTokenExpirationDateTime < DateTime.UtcNow)
+            {
+                _context.RefreshTokens.Remove(userRefreshToken);
+            }
+        }
+        
+        var refreshToken = new RefreshToken();
+        refreshToken.AppUserId = appUser.Id;
+        _context.RefreshTokens.Add(refreshToken);
+        
+        
         // generate jwt
         var jwt = IdentityExtensions.GenerateJwt(
             claimsPrincipal.Claims,
@@ -86,6 +107,7 @@ public class AccountController : ControllerBase
         var res = new JwtResponse()
         {
             Token = jwt,
+            RefreshToken = refreshToken.Token,
             FirstName = appUser.FirstName,
             LastName = appUser.LastName,
         };

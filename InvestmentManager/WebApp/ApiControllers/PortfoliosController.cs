@@ -8,6 +8,7 @@ using App.Domain;
 using Base.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Portfolio = App.BLL.DTO.Portfolio;
 
 namespace WebApp.ApiControllers
@@ -31,6 +32,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(typeof(IEnumerable<App.BLL.DTO.Portfolio>), 200)]
         [AllowAnonymous]
         [HttpGet]
+        // TODO: return public.dto.portfolio?
         public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetPortfolios()
         {
             return await _bll.Portfolios.GetAllAsync();
@@ -44,6 +46,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
         [HttpGet("{id}")]
+        // TODO: ka public dto
         public async Task<ActionResult<App.BLL.DTO.Portfolio>> GetPortfolio(Guid id)
         {
             var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id);
@@ -59,6 +62,7 @@ namespace WebApp.ApiControllers
         // PUT: api/Portfolios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        // TODO: also DTO
         public async Task<IActionResult> PutPortfolio(Guid id, App.BLL.DTO.Portfolio portfolio)
         {
             if (id != portfolio.Id)

@@ -9,7 +9,7 @@ namespace App.DAL.EF;
 // generics to use own Users and Roles
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid> 
 {
-    public DbSet<RefreshToken> RefreshToken { get; set; } = default!;
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
     
     public DbSet<Cash> Cashes { get; set; } = default!;
     public DbSet<Industry> Industries { get; set; } = default!;

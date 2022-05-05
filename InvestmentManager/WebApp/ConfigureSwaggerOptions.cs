@@ -49,7 +49,7 @@ public class ConfigureSwaggerOptions: IConfigureOptions<SwaggerGenOptions>
             Type = SecuritySchemeType.ApiKey,
             Scheme = "Bearer"
         });
-
+        
         options.AddSecurityRequirement(new OpenApiSecurityRequirement()
         {
             {

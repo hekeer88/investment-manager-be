@@ -19,7 +19,7 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
     private  IPortfolioRepository? _portfolios;
     public virtual IPortfolioRepository Portfolios => _portfolios ??= new PortfolioRepository(UOWDbContext, new PortfolioMapper(_mapper));
     
-    // selliselt teha k6ik repod
+    //TODO: selliselt teha k6ik repod
     private  IStockRepository? _stocks;
     public virtual IStockRepository Stocks => _stocks ??= new StockRepository(UOWDbContext, new StockMapper(_mapper));
     

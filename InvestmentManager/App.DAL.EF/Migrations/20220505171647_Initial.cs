@@ -224,7 +224,7 @@ namespace App.DAL.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshToken",
+                name: "RefreshTokens",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -232,13 +232,13 @@ namespace App.DAL.EF.Migrations
                     TokenExpirationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PreviousToken = table.Column<string>(type: "character varying(36)", maxLength: 36, nullable: true),
                     PreviousTokenExpirationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: true)
+                    AppUserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RefreshToken_AspNetUsers_AppUserId",
+                        name: "FK_RefreshTokens_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -477,8 +477,8 @@ namespace App.DAL.EF.Migrations
                 column: "StockId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshToken_AppUserId",
-                table: "RefreshToken",
+                name: "IX_RefreshTokens_AppUserId",
+                table: "RefreshTokens",
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
@@ -533,7 +533,7 @@ namespace App.DAL.EF.Migrations
                 name: "Prices");
 
             migrationBuilder.DropTable(
-                name: "RefreshToken");
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

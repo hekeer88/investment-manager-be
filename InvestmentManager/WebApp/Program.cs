@@ -150,6 +150,29 @@ app.UseSwaggerUI(options =>
     // options.RoutePrefix = string.Empty;
 });
 
+
+
+
+
+// // CORS teema
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(name: "MyPolicy",
+//         policy =>
+//         {
+//             policy.WithOrigins("http://https://localhost:7209",
+//                     "https://https://localhost:3002")
+//                 .WithMethods("PUT", "DELETE", "GET");
+//         });
+// });
+//
+// app.UseCors();
+
+
+
+
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
