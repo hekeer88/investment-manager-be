@@ -5,61 +5,67 @@ using Base.Contracts.Domain;
 
 namespace Base.BLL;
 
-public class
-    BaseEntityService<TBllEntity, TDalEntity, TRepository> :
-        BaseEntityService<TBllEntity, TDalEntity, TRepository, Guid>, IEntityService<TBllEntity>
+public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepository> :
+        BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepository, Guid>, 
+        IEntityService<TPublicEntity, TBllEntity>
+    where TPublicEntity : class, IDomainEntityId
     where TDalEntity : class, IDomainEntityId
     where TBllEntity : class, IDomainEntityId
     where TRepository : IEntityRepository<TDalEntity>
 {
-    public BaseEntityService(TRepository repository, IMapper<TBllEntity, TDalEntity> mapper) : base(repository, mapper)
+    public BaseEntityService(TRepository repository, IMapper<TBllEntity, TDalEntity> bllMapper, 
+        IMapper<TPublicEntity, TBllEntity> publicMapper) : base(repository, bllMapper, publicMapper)
     {
     }
 }
 
-public class BaseEntityService<TBllEntity, TDalEntity, TRepository, TKey> : IEntityService<TBllEntity, TKey>
+public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepository, TKey> : IEntityService<TPublicEntity, TBllEntity, TKey>
+    where TPublicEntity : class, IDomainEntityId<TKey>
     where TBllEntity : class, IDomainEntityId<TKey>
     where TRepository : IEntityRepository<TDalEntity, TKey>
     where TKey : IEquatable<TKey>
     where TDalEntity : class, IDomainEntityId<TKey>
 {
     protected TRepository Repository;
-    protected IMapper<TBllEntity, TDalEntity> Mapper;
+    protected IMapper<TBllEntity, TDalEntity> BLLMapper;
+    protected IMapper<TPublicEntity, TBllEntity> PublicMapper;
 
-    public BaseEntityService(TRepository repository, IMapper<TBllEntity, TDalEntity> mapper)
+    public BaseEntityService(TRepository repository, IMapper<TBllEntity, TDalEntity> bllMapper, 
+        IMapper<TPublicEntity, TBllEntity> publicMapper)
     {
         Repository = repository;
-        Mapper = mapper;
+        BLLMapper = bllMapper;
+        PublicMapper = publicMapper;
     }
 
     public TBllEntity Add(TBllEntity entity)
     {
-        return Mapper.Map(Repository.Add(Mapper.Map(entity)!))!;
+        return BLLMapper.Map(Repository.Add(BLLMapper.Map(entity)!))!;
     }
 
     public TBllEntity Update(TBllEntity entity)
     {
-        return Mapper.Map(Repository.Update(Mapper.Map(entity)!))!;
+        return BLLMapper.Map(Repository.Update(BLLMapper.Map(entity)!))!;
     }
 
     public TBllEntity Remove(TBllEntity entity)
     {
-        return Mapper.Map(Repository.Remove(Mapper.Map(entity)!))!;
+        return BLLMapper.Map(Repository.Remove(BLLMapper.Map(entity)!))!;
     }
 
     public TBllEntity Remove(TKey id)
     {
-        return Mapper.Map(Repository.Remove(id))!;
+        return BLLMapper.Map(Repository.Remove(id))!;
     }
 
     public TBllEntity? FirstOrDefault(TKey id, bool noTracking = true)
     {
-        return Mapper.Map(Repository.FirstOrDefault(id, noTracking))!;
+        return BLLMapper.Map(Repository.FirstOrDefault(id, noTracking))!;
     }
 
     public IEnumerable<TBllEntity> GetAll(bool noTracking = true)
     {
-        return Repository.GetAll(noTracking).Select(x => Mapper.Map(x)!);
+        return Repository.GetAll(noTracking).Select(x => BLLMapper.Map(x)!);
     }
 
     public bool Exists(TKey id)
@@ -69,13 +75,29 @@ public class BaseEntityService<TBllEntity, TDalEntity, TRepository, TKey> : IEnt
     
     public async Task<TBllEntity?> FirstOrDefaultAsync(TKey id, bool noTracking = true)
     {
-        return Mapper.Map(await Repository.FirstOrDefaultAsync(id, noTracking));
+        return BLLMapper.Map(await Repository.FirstOrDefaultAsync(id, noTracking));
     }
 
     public async Task<IEnumerable<TBllEntity>> GetAllAsync(bool noTracking = true)
     {
-        return (await Repository.GetAllAsync(noTracking)).Select(x => Mapper.Map(x)!);
+        return (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
     }
+    
+
+    
+    // Public
+     public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true)
+     {
+         var res =  (await GetAllAsync(noTracking)).Select(x => PublicMapper.Map(x)!);
+
+         foreach (var r in res)
+         {
+             Console.WriteLine("TEST: " + res);
+         }
+
+         return res;
+     }
+    
 
     public Task<bool> ExistsAsync(TKey id)
     {
@@ -84,6 +106,6 @@ public class BaseEntityService<TBllEntity, TDalEntity, TRepository, TKey> : IEnt
 
     public async Task<TBllEntity> RemoveAsync(TKey id)
     {
-        return Mapper.Map(await Repository.RemoveAsync(id))!;
+        return BLLMapper.Map(await Repository.RemoveAsync(id))!;
     }
 }

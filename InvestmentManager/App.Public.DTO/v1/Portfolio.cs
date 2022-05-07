@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using App.BLL.DTO.Identity;
+using App.Resources.App.Domain;
 using Base.Domain;
 
-namespace App.Public.DTO;
+namespace App.Public.DTO.v1;
 
 public class Portfolio : DomainEntityId
 {
@@ -13,13 +15,13 @@ public class Portfolio : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
     public string? Description { get; set; } 
     
-    // public ICollection<Stock>? Stocks { get; set; }
-    // public ICollection<Loan>? Loans { get; set; }
-    // public ICollection<Cash>? Cashes { get; set; }
+    public ICollection<Stock>? Stocks { get; set; }
+    public ICollection<Loan>? Loans { get; set; }
+    public ICollection<Cash>? Cashes { get; set; }
 
     // // TODO: must have UserId, but for testing is turned off
-    // public Guid? AppUserId { get; set; }
-    // [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(AppUser))]
-    // public AppUser? AppUser { get; set; }
+    public Guid? AppUserId { get; set; }
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(AppUser))]
+    public AppUser? AppUser { get; set; }
 
 }

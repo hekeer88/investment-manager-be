@@ -4,15 +4,15 @@ using Base.Contracts.Domain;
 
 namespace Base.Contracts.BLL;
 
-public interface IEntityService<TEntity> : IEntityRepository<TEntity>, IEntityService<TEntity, Guid>
-    where TEntity: class, IDomainEntityId
+public interface IEntityService<TPublicEntity, TBllEntity> : IEntityRepository<TBllEntity>, IEntityService<TPublicEntity, TBllEntity, Guid>
+    where TBllEntity: class, IDomainEntityId
 {
     
 }
 
-public interface IEntityService<TEntity, TKey> : IEntityRepository<TEntity, TKey> 
-    where TEntity: class, IDomainEntityId<TKey>
+public interface IEntityService<TPublicEntity, TEntity, TKey> : IEntityRepository<TEntity, TKey>
+    where TEntity : class, IDomainEntityId<TKey>
     where TKey : IEquatable<TKey>
 {
-    
+    Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true);
 }

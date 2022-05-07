@@ -29,14 +29,15 @@ namespace WebApp.ApiControllers
         // GET: api/Portfolios
         [Produces("application/json")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<App.BLL.DTO.Portfolio>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Portfolio>), 200)]
         [AllowAnonymous]
         [HttpGet]
         // TODO: return public.dto.portfolio?
-        public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetPortfolios()
+        public async Task<IEnumerable<App.Public.DTO.v1.Portfolio>> GetPortfolios()
         {
-            return await _bll.Portfolios.GetAllAsync();
-            
+
+            return await _bll.Portfolios.GetAllAsyncPublic();
+
         }
 
         // GET: api/Portfolios/5

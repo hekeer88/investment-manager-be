@@ -7,17 +7,20 @@ using Base.Contracts.Base;
 
 namespace App.BLL.Services;
 
-public class StockService: BaseEntityService<App.BLL.DTO.Stock, App.DAL.DTO.Stock, IStockRepository>,
+
+public class StockService: BaseEntityService<App.Public.DTO.v1.Stock, 
+        App.BLL.DTO.Stock, App.DAL.DTO.Stock, IStockRepository>,
     IStockService
 {
-    public StockService(IStockRepository repository, IMapper<Stock, DAL.DTO.Stock> mapper) : base(repository, mapper)
+    public StockService(IStockRepository repository, IMapper<Stock, DAL.DTO.Stock> bllMapper,
+        IMapper<App.Public.DTO.v1.Stock, Stock> publicMapper) : base(repository, bllMapper, publicMapper)
     {
     }
 
     public async Task<IEnumerable<Stock>> GetAllAsync(Guid portfolioId, bool noTracking = true)
     {
         var res =
-            (await Repository.GetAllAsync(portfolioId, noTracking)).Select(x => Mapper.Map(x)!).ToList();
+            (await Repository.GetAllAsync(portfolioId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
 
         foreach (var stock in res)
         {

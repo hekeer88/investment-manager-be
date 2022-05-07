@@ -29,6 +29,4 @@ public interface IEntityRepository<TEntity, TKey>
     Task<bool> ExistsAsync(TKey id);
     Task<TEntity> RemoveAsync(TKey id);
     
-   
-    // Task<ActionResult<TEntity>> FindAsync(TKey id, bool noTracking = true);
 }

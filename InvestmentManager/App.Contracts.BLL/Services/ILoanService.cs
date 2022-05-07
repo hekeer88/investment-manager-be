@@ -3,7 +3,7 @@ using Base.Contracts.BLL;
 
 namespace App.Contracts.BLL.Services;
 
-public interface ILoanService :  IEntityService<App.BLL.DTO.Loan>,
+public interface ILoanService :  IEntityService<App.Public.DTO.v1.Loan, App.BLL.DTO.Loan>,
     ILoanCustom<App.BLL.DTO.Loan>
 {
     
