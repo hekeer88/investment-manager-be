@@ -12,5 +12,7 @@ public class AutomapperConfig : Profile
         CreateMap<App.BLL.DTO.Stock, App.DAL.DTO.Stock>().ReverseMap();
         CreateMap<App.BLL.DTO.Loan, App.DAL.DTO.Loan>().ReverseMap();
         CreateMap<App.BLL.DTO.Identity.AppUser, App.DAL.DTO.Identity.AppUser>().ReverseMap();
+        
+        CreateMap<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio>().ReverseMap();
     }
 }

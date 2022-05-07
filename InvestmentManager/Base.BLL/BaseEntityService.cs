@@ -88,14 +88,9 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     // Public
      public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true)
      {
-         var res =  (await GetAllAsync(noTracking)).Select(x => PublicMapper.Map(x)!);
+         var res =  (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
 
-         foreach (var r in res)
-         {
-             Console.WriteLine("TEST: " + res);
-         }
-
-         return res;
+         return res.Select(x => PublicMapper.Map(x)!);
      }
     
 
