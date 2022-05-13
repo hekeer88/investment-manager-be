@@ -40,14 +40,15 @@ namespace WebApp.ApiControllers
         // GET: api/Portfolios/5
         [Produces("application/json")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(App.BLL.DTO.Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.BLL.DTO.Portfolio>> GetPortfolio(Guid id)
+        public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> GetPortfolio(Guid id)
         {
-            var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id);
 
+            var portfolio = await _bll.Portfolios.FirstOrDefaultAsyncPublic(id);
+            
             if (portfolio == null)
             {
                 return NotFound();

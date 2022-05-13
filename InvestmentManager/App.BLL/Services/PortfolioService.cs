@@ -4,6 +4,7 @@ using App.Contracts.DAL;
 using App.DAL.EF.Mappers;
 using Base.BLL;
 using Base.Contracts.Base;
+using Portfolio = App.Public.DTO.v1.Portfolio;
 using PortfolioMapper = App.Public.DTO.Mappers.PortfolioMapper;
 
 namespace App.BLL.Services;
@@ -46,10 +47,9 @@ public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, Ap
         return res;
     }
 
-
-
-
-
-
-
+    public async Task<Public.DTO.v1.Portfolio?> FirstOrDefaultAsyncPublic(Guid portfolioId, bool noTracking = true)
+    {
+        var res = BLLMapper.Map((await Repository.FirstOrDefaultAsync(portfolioId, noTracking)));
+        return PublicMapper.Map(res);
+    }
 }
