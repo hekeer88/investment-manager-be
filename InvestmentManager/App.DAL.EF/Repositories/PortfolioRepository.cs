@@ -16,6 +16,16 @@ public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, A
     {
     }
     
+    public async Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
+    {
+        var query = CreateQuery(noTracking);
+        query = query
+            .Include(p => p.AppUser)
+            .Where(p => p.AppUserId == userId);
+
+        return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
+    }
+    
     public async Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllByNameAsync(string name, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
@@ -23,13 +33,5 @@ public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, A
             .Select(x => Mapper.Map(x)!);
     }
     
-    public async Task<IEnumerable<App.DAL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
-    {
-        var query = CreateQuery(noTracking);
-        query = query
-            .Include(u => u.AppUser)
-            .Where(m => m.AppUserId == userId);
-
-        return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
-    }
+    
 }

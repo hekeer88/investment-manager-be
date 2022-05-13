@@ -104,6 +104,7 @@ namespace WebApp.ApiControllers
                 return BadRequest("Api version is mandatory");
             }
             
+            portfolio.AppUserId = User.GetUserId();
             _bll.Portfolios.Add(portfolio);
             await _bll.SaveChangesAsync();
 

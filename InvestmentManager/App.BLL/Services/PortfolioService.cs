@@ -8,11 +8,12 @@ using PortfolioMapper = App.Public.DTO.Mappers.PortfolioMapper;
 
 namespace App.BLL.Services;
 
-public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio, App.DAL.DTO.Portfolio, IPortfolioRepository>, 
+public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio, App.DAL.DTO.Portfolio, 
+        IPortfolioRepository>, 
     IPortfolioService
 {
-    public PortfolioService(IPortfolioRepository repository, IMapper<Portfolio, DAL.DTO.Portfolio> bllMapper,
-        IMapper<App.Public.DTO.v1.Portfolio, Portfolio> publicMapper) : base(repository, bllMapper, publicMapper)
+    public PortfolioService(IPortfolioRepository repository, IMapper<App.BLL.DTO.Portfolio, DAL.DTO.Portfolio> bllMapper,
+        IMapper<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio> publicMapper) : base(repository, bllMapper, publicMapper)
     {
     }
     

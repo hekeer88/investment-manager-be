@@ -15,17 +15,18 @@ public class LoanService: BaseEntityService<App.Public.DTO.v1.Loan, App.BLL.DTO.
     {
     }
 
-    public async Task<IEnumerable<Loan>> GetAllAsync(Guid portfolioId, bool noTracking = true)
+    public async Task<IEnumerable<App.BLL.DTO.Loan>> GetAllAsync(Guid portfolioId, bool noTracking = true)
     {
         var res =
             (await Repository.GetAllAsync(portfolioId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
 
         foreach (var loan in res)
         {
-            loan.LoanName = loan.LoanName.ToUpper();
+            loan.LoanName = loan.LoanName.ToLower();
         }
 
         return res;
 
     }
+    
 }

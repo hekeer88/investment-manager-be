@@ -15,12 +15,13 @@ public class LoanRepository : BaseEntityRepository<App.DAL.DTO.Loan, App.Domain.
     {
     }
 
-    public async Task<IEnumerable<Loan>> GetAllAsync(Guid portfolioId, bool noTracking = true)
+    public async Task<IEnumerable<App.DAL.DTO.Loan>> GetAllAsync(Guid portfolioId, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
         query = query
             .Where(l => l.PortfolioId == portfolioId);
-
+        
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
     }
+    
 }

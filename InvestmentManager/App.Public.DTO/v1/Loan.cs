@@ -37,11 +37,11 @@ public class Loan : DomainEntityId
     public decimal Interest { get; set; } = default!;
     
 
-    public ICollection<Transaction>? Transactions { get; set; }
+    // public ICollection<Transaction>? Transactions { get; set; }
     
-    public Guid PortfolioId { get; set; }
-    public Portfolio? Portfolio { get; set; }
+    // public Guid PortfolioId { get; set; }
+    // public Portfolio? Portfolio { get; set; }
     
-    public Guid RegionId { get; set; }
-    public Region? Region { get; set; }
+    // public Guid RegionId { get; set; }
+    // public Region? Region { get; set; }
 }
