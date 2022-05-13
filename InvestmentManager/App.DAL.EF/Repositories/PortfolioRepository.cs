@@ -12,7 +12,8 @@ public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, A
     IPortfolioRepository
 {
             
-    public PortfolioRepository(AppDbContext dbContext, IMapper<App.DAL.DTO.Portfolio, App.Domain.Portfolio> mapper) : base(dbContext, mapper)
+    public PortfolioRepository(AppDbContext dbContext, IMapper<App.DAL.DTO.Portfolio, App.Domain.Portfolio> mapper) 
+        : base(dbContext, mapper)
     {
     }
     

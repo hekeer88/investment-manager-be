@@ -94,11 +94,10 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     }
     
     // Public
-    public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(Guid userId, bool noTracking = true)
+    public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true)
     {
-        var res =  (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
-
-        return res.Select(x => PublicMapper.Map(x)!);
+        return ( await GetAllAsync(noTracking)).Select(x => PublicMapper.Map(x)!);
+        
     }
     
 }

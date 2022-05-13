@@ -32,7 +32,6 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Portfolio>), 200)]
         [AllowAnonymous]
         [HttpGet]
-        // TODO: return public.dto.portfolio?
         public async Task<IEnumerable<App.Public.DTO.v1.Portfolio>> GetPortfolios()
         {
             return await _bll.Portfolios.GetAllAsyncPublic(User.GetUserId());
@@ -45,7 +44,6 @@ namespace WebApp.ApiControllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
         [HttpGet("{id}")]
-        // TODO: ka public dto
         public async Task<ActionResult<App.BLL.DTO.Portfolio>> GetPortfolio(Guid id)
         {
             var portfolio = await _bll.Portfolios.FirstOrDefaultAsync(id);

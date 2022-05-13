@@ -7,5 +7,5 @@ namespace App.Contracts.BLL.Services;
 public interface IPortfolioService :  IEntityService<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio>, 
     IPortfolioCustom<App.BLL.DTO.Portfolio>
 {
-    // custom stuff here?
+    Task<IEnumerable<App.Public.DTO.v1.Portfolio>> GetAllAsyncPublic(Guid userId, bool noTracking = true);
 }
