@@ -21,6 +21,7 @@ public class Portfolio : DomainEntityId
     public ICollection<Cash>? Cashes { get; set; }
 
     // TODO: must have UserId, but for testing is turned off
+    // Probably dont need App user in DTO
     public Guid? AppUserId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(AppUser))]
     public AppUser? AppUser { get; set; }

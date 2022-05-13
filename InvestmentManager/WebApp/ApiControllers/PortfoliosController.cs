@@ -35,9 +35,7 @@ namespace WebApp.ApiControllers
         // TODO: return public.dto.portfolio?
         public async Task<IEnumerable<App.Public.DTO.v1.Portfolio>> GetPortfolios()
         {
-
-            return await _bll.Portfolios.GetAllAsyncPublic();
-
+            return await _bll.Portfolios.GetAllAsyncPublic(User.GetUserId());
         }
 
         // GET: api/Portfolios/5

@@ -82,17 +82,6 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     {
         return (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
     }
-    
-
-    
-    // Public
-     public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true)
-     {
-         var res =  (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
-
-         return res.Select(x => PublicMapper.Map(x)!);
-     }
-    
 
     public Task<bool> ExistsAsync(TKey id)
     {
@@ -103,4 +92,13 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     {
         return BLLMapper.Map(await Repository.RemoveAsync(id))!;
     }
+    
+    // Public
+    public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(Guid userId, bool noTracking = true)
+    {
+        var res =  (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
+
+        return res.Select(x => PublicMapper.Map(x)!);
+    }
+    
 }

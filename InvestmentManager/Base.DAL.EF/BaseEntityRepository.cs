@@ -1,8 +1,8 @@
 ﻿
+using App.Domain.Identity;
 using Base.Contracts.Base;
 using Base.Contracts.DAL;
 using Base.Contracts.Domain;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Base.DAL.EF;
@@ -34,26 +34,30 @@ public class BaseEntityRepository<TDalEntity, TDomainEntity, TKey, TDbContext> :
     protected readonly DbSet<TDomainEntity> RepoDbSet;
     protected readonly IMapper<TDalEntity, TDomainEntity> Mapper;
 
-    public BaseEntityRepository(
-        TDbContext dbContext,
+    public BaseEntityRepository(TDbContext dbContext,
         IMapper<TDalEntity, TDomainEntity> mapper
     )
     {
         RepoDbContext = dbContext;
         RepoDbSet = dbContext.Set<TDomainEntity>();
         Mapper = mapper;
+
     }
 
     protected virtual IQueryable<TDomainEntity> CreateQuery(bool noTracking = true)
     {
         // TODO: entity ownership control
+        Console.WriteLine("DBContext: " + RepoDbContext);
+        Console.WriteLine("RepoDbSet: " + RepoDbSet.ToString());
 
         var query = RepoDbSet.AsQueryable();
+        
         if (noTracking)
         {
             query = query.AsNoTracking();
         }
-
+        
+        
         return query;
     }
 
@@ -64,12 +68,7 @@ public class BaseEntityRepository<TDalEntity, TDomainEntity, TKey, TDbContext> :
 
     public virtual TDalEntity Update(TDalEntity entity)
     {
-        return Mapper.Map(
-            RepoDbSet.Update(
-                    Mapper.Map(entity)!
-                )
-                .Entity
-        )!;
+        return Mapper.Map(RepoDbSet.Update(Mapper.Map(entity)!).Entity)!;
     }
 
     public virtual TDalEntity Remove(TDalEntity entity)

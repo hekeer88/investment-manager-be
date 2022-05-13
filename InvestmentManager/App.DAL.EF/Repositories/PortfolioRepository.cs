@@ -1,6 +1,7 @@
 using App.Contracts.DAL;
 using App.Public.DTO;
 using App.Public.DTO.v1;
+using AutoMapper;
 using Base.Contracts.Base;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;

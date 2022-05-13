@@ -16,10 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		..\HW01.pdf = ..\HW01.pdf
-		docker-compose.yml = docker-compose.yml
-		.dockerignore = .dockerignore
 		.gitignore = .gitignore
 		..\..\..\Documents\Career\IADB\4. semester\Distributed Systems\HW03-documentation.pdf = ..\..\..\Documents\Career\IADB\4. semester\Distributed Systems\HW03-documentation.pdf
+		Dockerfile = Dockerfile
+		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Domain", "App.Domain\App.Domain.csproj", "{3AB4E217-9202-48F6-B484-FE86BC003BCA}"

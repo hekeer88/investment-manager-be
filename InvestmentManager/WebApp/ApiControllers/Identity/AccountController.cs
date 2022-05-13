@@ -223,10 +223,12 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest($"Cant parse user info, {e.Message}");
+            // TODO: return correctly formed(as in validation errors) error messages.
+            return Problem($"Cant parse user info, {e.Message}");
+            
         }
         
-        // validate token signature
+        // TODO: validate token signature
         // https://stackoverflow.com/questions/49407749/jwt-token-validation-in-asp-net
     
         var userEmail = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;

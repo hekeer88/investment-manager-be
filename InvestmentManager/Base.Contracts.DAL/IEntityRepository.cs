@@ -1,5 +1,4 @@
 ﻿using Base.Contracts.Domain;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Base.Contracts.DAL;
 

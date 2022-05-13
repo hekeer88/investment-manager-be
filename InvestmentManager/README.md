@@ -36,10 +36,21 @@ dotnet aspnet-codegenerator controller -name StocksController   -actions -m App.
 dotnet aspnet-codegenerator controller -name TransactionsController   -actions -m App.Domain.Transaction   -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 ~~~
 
-
-
-
 c# kasutasin seda rezoirpage jaoks
 ~~~sh
 dotnet aspnet-codegenerator razorpage -m Job -dc AppDbContext -udl -outDir Pages/Jobs --referenceScriptLibraries -f
 ~~~
+
+
+
+Docker build and run
+~~~sh
+docker build -t docker-test-aspnet-6 .
+docker run --name webapp_docker --rm -it -p 8000:80 docker-test-aspnet-6
+docker tag docker-test-aspnet-6 henri88/docker-test-aspnet-6:latest
+docker login -u henri88
+docker push henri88/docker-test-aspnet-6:latest
+~~~
+
+Update:
+kui webhook on lisatud(hetkel on), siis peale muudatust build -> tag(as latest again) -> push

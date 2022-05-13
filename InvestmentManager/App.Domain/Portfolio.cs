@@ -13,7 +13,8 @@ public class Portfolio : DomainEntityMetaId
     public string Name { get; set; } = default!;
     
     [MaxLength(512)]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))] // can be remove for REST API, only webcontroller use it
+    // TODO: can be remove for REST API, only webcontroller use it
+    [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))] 
     public string? Description { get; set; } 
     
     public ICollection<Stock>? Stocks { get; set; }

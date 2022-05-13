@@ -21,7 +21,7 @@ public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, Ap
         return (await Repository.GetAllByNameAsync(name, noTracking)).Select(x => BLLMapper.Map(x)!);
     }
 
-    public async Task<IEnumerable<Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
+    public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         
         // business logic siin, nt nagu see n2ide mis teeb portfoli nime suureks
