@@ -59,16 +59,20 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Portfolios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         [HttpPut("{id}")]
-        // TODO: also DTO
-        public async Task<IActionResult> PutPortfolio(Guid id, App.BLL.DTO.Portfolio portfolio)
+        public async Task<IActionResult> PutPortfolio(Guid id, App.Public.DTO.v1.Portfolio portfolio)
         {
             if (id != portfolio.Id)
             {
                 return BadRequest();
             }
 
-            _bll.Portfolios.Add(portfolio);
+            _bll.Portfolios.AddPublic(portfolio);
 
             // _context.Entry(portfolio).State = EntityState.Modified;
 
@@ -94,9 +98,13 @@ namespace WebApp.ApiControllers
         // POST: api/Portfolios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [AllowAnonymous]
-        // TODO: from body is questionable, and olso Portfolia is domain.portfolio but should use some DTO
-        public async Task<ActionResult<App.BLL.DTO.Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
+        // TODO: Portfolia is domain.portfolio but should use some DTO?
+        public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
         {
             if (HttpContext.GetRequestedApiVersion() == null)
             {
@@ -124,7 +132,6 @@ namespace WebApp.ApiControllers
         // DELETE: api/Portfolios/5
         [Produces("application/json")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(App.BLL.DTO.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [AllowAnonymous]
         [HttpDelete("{id}")]

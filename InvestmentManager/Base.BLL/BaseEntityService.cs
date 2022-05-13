@@ -42,7 +42,7 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     {
         return BLLMapper.Map(Repository.Add(BLLMapper.Map(entity)!))!;
     }
-
+    
     public TBllEntity Update(TBllEntity entity)
     {
         return BLLMapper.Map(Repository.Update(BLLMapper.Map(entity)!))!;
@@ -93,17 +93,11 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
         return BLLMapper.Map(await Repository.RemoveAsync(id))!;
     }
     
-    // Public
-    // public async Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(bool noTracking = true)
-    // {
-    //     return ( await GetAllAsync(noTracking)).Select(x => PublicMapper.Map(x)!);
-    //     
-    // }
-    //
-    // public async Task<TPublicEntity?> FirstOrDefaultAsyncPublic(TKey id, bool noTracking = true)
-    // {
-    //     return PublicMapper.Map(await FirstOrDefaultAsync(id, noTracking));
-    //
-    // }
     
+    // Public
+    public TPublicEntity AddPublic(TPublicEntity entity)
+    {
+        return PublicMapper.Map(Add(PublicMapper.Map(entity)!))!;
+    }
+
 }

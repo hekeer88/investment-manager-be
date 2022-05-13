@@ -15,5 +15,5 @@ public interface IEntityService<TPublicEntity, TEntity, TKey> : IEntityRepositor
     where TEntity : class, IDomainEntityId<TKey>
     where TKey : IEquatable<TKey>
 {
-    // Task<IEnumerable<TPublicEntity>> GetAllAsyncPublic(Guid userId, bool noTracking = true);
+    TPublicEntity AddPublic(TPublicEntity entity);
 }
