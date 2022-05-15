@@ -14,4 +14,6 @@ public class Portfolio : DomainEntityId
     [MaxLength(512)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
     public string? Description { get; set; }
+    
+    public Guid? AppUserId { get; set; }
 }

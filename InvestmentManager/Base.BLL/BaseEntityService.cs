@@ -43,11 +43,21 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
         return BLLMapper.Map(Repository.Add(BLLMapper.Map(entity)!))!;
     }
     
+    public TPublicEntity Add(TPublicEntity entity)
+    {
+        return PublicMapper.Map(Add(PublicMapper.Map(entity)!))!;
+    }
+    
     public TBllEntity Update(TBllEntity entity)
     {
         return BLLMapper.Map(Repository.Update(BLLMapper.Map(entity)!))!;
     }
-
+    
+    public TPublicEntity Update(TPublicEntity entity)
+    {
+        return PublicMapper.Map(Update(PublicMapper.Map(entity)!))!;
+    }
+    
     public TBllEntity Remove(TBllEntity entity)
     {
         return BLLMapper.Map(Repository.Remove(BLLMapper.Map(entity)!))!;
@@ -93,11 +103,7 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
         return BLLMapper.Map(await Repository.RemoveAsync(id))!;
     }
     
-    
-    // Public
-    public TPublicEntity AddPublic(TPublicEntity entity)
-    {
-        return PublicMapper.Map(Add(PublicMapper.Map(entity)!))!;
-    }
+
+
 
 }

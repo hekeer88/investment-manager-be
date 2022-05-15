@@ -15,5 +15,7 @@ public interface IEntityService<TPublicEntity, TEntity, TKey> : IEntityRepositor
     where TEntity : class, IDomainEntityId<TKey>
     where TKey : IEquatable<TKey>
 {
-    TPublicEntity AddPublic(TPublicEntity entity);
+    TPublicEntity Add(TPublicEntity entity);
+    TPublicEntity Update(TPublicEntity entity);
+
 }

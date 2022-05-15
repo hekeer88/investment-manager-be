@@ -15,7 +15,7 @@ public class Transaction : DomainEntityMetaId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Transaction), Name = nameof(TransactionDate))]
     public DateTime TransactionDate { get; set; } = default!;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Transaction), Name = nameof(Type))]
-    public char Type { get; set; } = default!;
+    public string Type { get; set; } = default!;
     
     public Guid? StockId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Transaction), Name = nameof(Instrument))]

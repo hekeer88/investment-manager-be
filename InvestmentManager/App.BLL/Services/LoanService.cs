@@ -28,5 +28,18 @@ public class LoanService: BaseEntityService<App.Public.DTO.v1.Loan, App.BLL.DTO.
         return res;
 
     }
-    
+
+    public async Task<IEnumerable<Public.DTO.v1.Loan>> GetAllPublicAsync(Guid portfolioId, bool noTracking = true)
+    {
+        var res =
+            (await GetAllAsync(portfolioId, noTracking)).Select(l => PublicMapper.Map(l)!).ToList();
+        
+        return res;
+    }
+
+    public async Task<Public.DTO.v1.Loan?> FirstOrDefaultPublicAsync(Guid id, bool noTracking = true)
+    {
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(id, noTracking));
+        return PublicMapper.Map(res);
+    }
 }

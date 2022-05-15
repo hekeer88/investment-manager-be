@@ -54,5 +54,4 @@ public class AppBLL : BaseBll<IAppUnitOfWork>, IAppBLL
     public ILoanService Loans =>
         _loans ??= new LoanService(UnitOfWork.Loans, new Mappers.LoanMapper(_bllMapper),
             new Public.DTO.Mappers.LoanMapper(_publicMapper));
-    
 }

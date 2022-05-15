@@ -19,7 +19,7 @@ public class Loan : DomainEntityId
     public string ContractNumber { get; set; } = default!;
     
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(Collateral))]
-    public char Collateral { get; set; } = default!;
+    public string Collateral { get; set; } = default!;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(LoanDate))]
     public DateTime LoanDate { get; set; } = default!;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(EndDate))]
@@ -30,7 +30,7 @@ public class Loan : DomainEntityId
     public decimal Amount { get; set; } = default!;
     
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(ScheduleType))]
-    public char ScheduleType { get; set; } = default!;
+    public string ScheduleType { get; set; } = default!;
     
     [Range(0, 999.99)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(Interest))]
@@ -39,9 +39,9 @@ public class Loan : DomainEntityId
 
     // public ICollection<Transaction>? Transactions { get; set; }
     
-    // public Guid PortfolioId { get; set; }
+    public Guid PortfolioId { get; set; }
     // public Portfolio? Portfolio { get; set; }
     
-    // public Guid RegionId { get; set; }
+    public Guid? RegionId { get; set; }
     // public Region? Region { get; set; }
 }

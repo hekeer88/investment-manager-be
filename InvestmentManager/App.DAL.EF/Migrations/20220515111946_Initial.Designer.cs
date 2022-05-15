@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220505171647_Initial")]
+    [Migration("20220515111946_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,8 +245,9 @@ namespace App.DAL.EF.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<char>("Collateral")
-                        .HasColumnType("character(1)");
+                    b.Property<string>("Collateral")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ContractNumber")
                         .IsRequired()
@@ -279,8 +280,9 @@ namespace App.DAL.EF.Migrations
                     b.Property<Guid>("RegionId")
                         .HasColumnType("uuid");
 
-                    b.Property<char>("ScheduleType")
-                        .HasColumnType("character(1)");
+                    b.Property<string>("ScheduleType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -491,8 +493,9 @@ namespace App.DAL.EF.Migrations
                     b.Property<decimal>("TransactionPrice")
                         .HasColumnType("numeric");
 
-                    b.Property<char>("Type")
-                        .HasColumnType("character(1)");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

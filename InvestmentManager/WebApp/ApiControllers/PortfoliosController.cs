@@ -27,11 +27,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Portfolios
+        [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Portfolio>), 200)]
-        [AllowAnonymous]
-        [HttpGet]
         public async Task<IEnumerable<App.Public.DTO.v1.Portfolio>> GetPortfolios()
         {
             return await _bll.Portfolios.GetAllAsyncPublic(User.GetUserId());
@@ -42,7 +41,6 @@ namespace WebApp.ApiControllers
         [Consumes("application/json")]
         [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> GetPortfolio(Guid id)
         {
@@ -63,7 +61,6 @@ namespace WebApp.ApiControllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPortfolio(Guid id, App.Public.DTO.v1.Portfolio portfolio)
         {
@@ -72,9 +69,9 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Portfolios.AddPublic(portfolio);
+            portfolio.AppUserId = User.GetUserId();
+            _bll.Portfolios.Update(portfolio);
 
-            // _context.Entry(portfolio).State = EntityState.Modified;
 
             try
             {
@@ -102,9 +99,7 @@ namespace WebApp.ApiControllers
         [Consumes("application/json")]
         [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
-        // TODO: Portfolia is domain.portfolio but should use some DTO?
-        public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> PostPortfolio([FromBody] Portfolio portfolio)
+        public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> PostPortfolio([FromBody] App.Public.DTO.v1.Portfolio portfolio)
         {
             if (HttpContext.GetRequestedApiVersion() == null)
             {

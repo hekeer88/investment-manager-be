@@ -23,6 +23,7 @@ public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, Ap
         return (await Repository.GetAllByNameAsync(name, noTracking)).Select(x => BLLMapper.Map(x)!);
     }
 
+
     public async Task<IEnumerable<App.BLL.DTO.Portfolio>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         
@@ -49,7 +50,7 @@ public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, Ap
 
     public async Task<Public.DTO.v1.Portfolio?> FirstOrDefaultAsyncPublic(Guid portfolioId, bool noTracking = true)
     {
-        var res = BLLMapper.Map((await Repository.FirstOrDefaultAsync(portfolioId, noTracking)));
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(portfolioId, noTracking));
         return PublicMapper.Map(res);
     }
 }

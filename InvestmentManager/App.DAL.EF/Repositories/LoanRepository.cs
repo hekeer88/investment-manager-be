@@ -22,6 +22,8 @@ public class LoanRepository : BaseEntityRepository<App.DAL.DTO.Loan, App.Domain.
             .Where(l => l.PortfolioId == portfolioId);
         
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
+        
+        
     }
     
 }

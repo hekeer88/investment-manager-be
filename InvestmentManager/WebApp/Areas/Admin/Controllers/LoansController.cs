@@ -64,7 +64,9 @@ namespace WebApp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 loan.Id = Guid.NewGuid();
+                
                 _bll.Loans.Add(loan);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

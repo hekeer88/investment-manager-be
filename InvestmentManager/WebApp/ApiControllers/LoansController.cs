@@ -1,21 +1,17 @@
 #nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.BLL.DTO;
 using App.Contracts.BLL;
-using App.DAL.EF;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using App.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Portfolio = App.Domain.Portfolio;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion( "1.0" )]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LoansController : ControllerBase
     {
@@ -34,11 +30,28 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Loans/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<App.BLL.DTO.Loan>> GetLoan(Guid id)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Loan>), 200)]
+        [AllowAnonymous]
+        [HttpGet("{portfolioId}")]
+        public async Task<IEnumerable<App.Public.DTO.v1.Loan>> GetLoans(Guid portfolioId)
         {
-            var loan = await _bll.Loans.FirstOrDefaultAsync(id);
+            return await _bll.Loans.GetAllPublicAsync(portfolioId);
+        }
+        
+        // GET: api/Loans/5
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Loan), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<App.Public.DTO.v1.Loan>> GetLoan(Guid id)
+        {
 
+            var loan = await _bll.Loans.FirstOrDefaultPublicAsync(id);
+            
             if (loan == null)
             {
                 return NotFound();
@@ -81,12 +94,29 @@ namespace WebApp.ApiControllers
         // POST: api/Loans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<App.BLL.DTO.Loan>> PostLoan(App.BLL.DTO.Loan loan)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<App.Public.DTO.v1.Loan>> PostLoan([FromBody] App.Public.DTO.v1.Loan loan)
         {
+
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+
             _bll.Loans.Add(loan);
             await _bll.SaveChangesAsync();
-
-            return CreatedAtAction("GetLoan", new { id = loan.Id }, loan);
+            
+            return CreatedAtAction(
+                "GetLoan",
+                new
+                {
+                    id = loan.Id,
+                    version = HttpContext.GetRequestedApiVersion()!.ToString()
+                }
+                , loan);
         }
 
         // DELETE: api/Loans/5
