@@ -15,5 +15,7 @@ public class Portfolio : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
     public string? Description { get; set; }
     
+    public virtual decimal? LoanSum { get; set; }
+    
     public Guid? AppUserId { get; set; }
 }

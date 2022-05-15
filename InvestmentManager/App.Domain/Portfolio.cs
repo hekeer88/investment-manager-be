@@ -17,7 +17,7 @@ public class Portfolio : DomainEntityMetaId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))] 
     public string? Description { get; set; } 
     
-    public ICollection<Stock>? Stocks { get; set; }
+    public ICollection<Stock>? Stocks { get; set; } 
     public ICollection<Loan>? Loans { get; set; }
     public ICollection<Cash>? Cashes { get; set; }
 
@@ -25,6 +25,5 @@ public class Portfolio : DomainEntityMetaId
     public Guid? AppUserId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(AppUser))]
     public AppUser? AppUser { get; set; }
-    
-    
+
 }

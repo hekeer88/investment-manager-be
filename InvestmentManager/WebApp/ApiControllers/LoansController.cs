@@ -1,11 +1,11 @@
 #nullable disable
-using App.BLL.DTO;
+
 using App.Contracts.BLL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Portfolio = App.Domain.Portfolio;
+
 
 namespace WebApp.ApiControllers
 {
@@ -105,7 +105,7 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest("Api version is mandatory");
             }
-
+            
             _bll.Loans.Add(loan);
             await _bll.SaveChangesAsync();
             
