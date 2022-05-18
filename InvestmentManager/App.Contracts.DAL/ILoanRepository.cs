@@ -9,6 +9,6 @@ public interface ILoanRepository : IEntityRepository<App.DAL.DTO.Loan>,
 
 public interface ILoanCustom<TEntity>
 {
-    Task<IEnumerable<TEntity>> GetAllAsync(Guid portfolioId, bool noTracking = true);
+    Task<IEnumerable<TEntity>> GetAllAsync(Guid userId, bool noTracking = true);
     
 }

@@ -87,11 +87,13 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     {
         return BLLMapper.Map(await Repository.FirstOrDefaultAsync(id, noTracking));
     }
+    
 
     public async Task<IEnumerable<TBllEntity>> GetAllAsync(bool noTracking = true)
     {
         return (await Repository.GetAllAsync(noTracking)).Select(x => BLLMapper.Map(x)!);
     }
+    
 
     public Task<bool> ExistsAsync(TKey id)
     {

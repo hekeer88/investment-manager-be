@@ -17,7 +17,7 @@ public interface IEntityRepository<TEntity, TKey>
     TEntity Add(TEntity entity);
     TEntity Update(TEntity entity);
     TEntity Remove(TEntity entity);
-    TEntity Remove(TKey id);
+    TEntity Remove(TKey id);        
     TEntity? FirstOrDefault(TKey id, bool noTracking = true);
     IEnumerable<TEntity> GetAll(bool noTracking = true);
     bool Exists(TKey id);
