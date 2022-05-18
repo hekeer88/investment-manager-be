@@ -9,13 +9,6 @@ namespace App.Domain;
 public class Industry : DomainEntityMetaId
 {
 
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Industry), Name = nameof(Name))]
-    [Column(TypeName = "jsonb")]
-    public LangStr Name { get; set; } = new();
+    public string Name { get; set; } = default!;
     public ICollection<Stock>? Stocks { get; set; }
-    
-    // no appuser if for standard and shared Industry
-    public Guid? AppUserId { get; set; }
-    public AppUser? AppUser { get; set; }
-
 }

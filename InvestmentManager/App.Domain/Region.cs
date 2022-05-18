@@ -8,14 +8,9 @@ namespace App.Domain;
 
 public class Region : DomainEntityMetaId
 {
-
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Region), Name = nameof(Country))]
-    [Column(TypeName = "jsonb")]
-    public LangStr Country { get; set; } = new();
-
-    [Column(TypeName = "jsonb")]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Region), Name = nameof(Continent))]
-    public LangStr Continent { get; set; } = new();
+    
+    public string Country { get; set; } = default!;
+    public string Continent { get; set; } = default!;
     
     public ICollection<Stock>? Stocks { get; set; }
     public ICollection<Loan>? Loans { get; set; }

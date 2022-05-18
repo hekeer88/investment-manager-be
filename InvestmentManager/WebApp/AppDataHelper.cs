@@ -116,42 +116,31 @@ public static class AppDataHelper
         
         if (configuration.GetValue<bool>("DataInitialization:SeedData"))
         {
-            var region = new Region
+            var regionEST = new Region
             {
-                Country = 
-                {
-                    ["et-EE"] = "Eesti",
-                    ["en-GB"] = "Estonia"
-                },
-                Continent = 
-                {
-                    ["et-EE"] = "Euroopa",
-                    ["en-GB"] = "Europe"
-                }
+                Country = "Estonia",
+                Continent = "Europe"
+            };
+            
+            var regionLAV = new Region
+            {
+                Country = "LAV",
+                Continent = "Africa"
             };
             
             var telecommunication = new Industry
             {
-                Name = 
-                {
-                    ["et-EE"] = "Telekommunikatsioon",
-                    ["en-GB"] = "Telecommunication"
-                },
-               
+                Name = "Telecommunication"
             };
             var finance = new Industry
             {
-                Name = 
-                {
-                    ["et-EE"] = "Finantsteenused",
-                    ["en-GB"] = "Financial Services"
-                },
-               
+                Name = "Financial Services"
             };
 
             context.Industries.Add(finance);
             context.Industries.Add(telecommunication);
-            context.Regions.Add(region);
+            context.Regions.Add(regionEST);
+            context.Regions.Add(regionLAV);
             context.SaveChanges();
         }
         

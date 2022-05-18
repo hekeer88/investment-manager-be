@@ -13,12 +13,14 @@ public class StockRepository : BaseEntityRepository<App.DAL.DTO.Stock, App.Domai
     }
 
 
-    public async Task<IEnumerable<App.DAL.DTO.Stock>> GetAllAsync(Guid portfolioId, bool noTracking = true)
+    public async Task<IEnumerable<App.DAL.DTO.Stock>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
         query = query
-            .Where(p => p.PortfolioId == portfolioId);
+            .Include(s => s.Portfolio)
+            .Where(s => s.Portfolio.AppUserId == userId);
 
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
     }
+    
 }

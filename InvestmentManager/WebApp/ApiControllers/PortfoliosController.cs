@@ -37,11 +37,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Portfolios/5
+        [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
         public async Task<ActionResult<App.Public.DTO.v1.Portfolio>> GetPortfolio(Guid id)
         {
 
@@ -125,10 +125,10 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Portfolios/5
+        [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePortfolio(Guid id)
         {
             await _bll.Portfolios.RemoveAsync(id);

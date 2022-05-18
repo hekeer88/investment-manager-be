@@ -7,16 +7,13 @@ namespace App.BLL.DTO;
 public class Stock : DomainEntityId
 {
     [MaxLength(32)]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Company))]
     public string Company { get; set; } = default!;
     [MaxLength(8)]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Ticker))]
     public string Ticker { get; set; } = default!;
     [MaxLength(256)]
-    [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Comment))]
     public string? Comment { get; set; }
 
-    public ICollection<Price> Prices { get; set; } = new List<Price>();
+    public ICollection<Price>? Prices { get; set; } = new List<Price>();
     public ICollection<Transaction>? Transactions { get; set; }
     
     public Guid? RegionId { get; set; }
@@ -25,7 +22,7 @@ public class Stock : DomainEntityId
     public Guid PortfolioId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Portfolio))]
     public Portfolio? Portfolio { get; set; }
-    public Guid IndustryId { get; set; }
+    public Guid? IndustryId { get; set; }
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Industry))]
     public Industry? Industry { get; set; }
     

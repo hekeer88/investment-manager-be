@@ -29,4 +29,18 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
 
         return res;
     }
+    
+    public async Task<IEnumerable<Public.DTO.v1.Stock>> PublicGetAllAsync(Guid userId, bool noTracking = true)
+    {
+        var res =
+            (await GetAllAsync(userId, noTracking)).Select(x => PublicMapper.Map(x)!).ToList();
+        
+        return res;
+    }
+    
+    public async Task<Public.DTO.v1.Stock?> PublicFirstOrDefaultAsync(Guid stockId, bool noTracking = true)
+    {
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(stockId, noTracking));
+        return PublicMapper.Map(res);
+    }
 }

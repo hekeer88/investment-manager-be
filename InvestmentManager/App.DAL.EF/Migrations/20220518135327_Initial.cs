@@ -1,5 +1,4 @@
 ﻿using System;
-using Base.Domain;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -54,12 +53,28 @@ namespace App.DAL.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Industries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Industries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Regions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Country = table.Column<LangStr>(type: "jsonb", nullable: false),
-                    Continent = table.Column<LangStr>(type: "jsonb", nullable: false),
+                    Country = table.Column<string>(type: "text", nullable: false),
+                    Continent = table.Column<string>(type: "text", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
@@ -177,29 +192,6 @@ namespace App.DAL.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Industries",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<LangStr>(type: "jsonb", nullable: false),
-                    AppUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Industries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Industries_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Portfolios",
                 columns: table => new
                 {
@@ -273,14 +265,14 @@ namespace App.DAL.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoanName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    LoanName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     BorrowerName = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     ContractNumber = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    Collateral = table.Column<string>(type: "text", nullable: false),
+                    Collateral = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
                     LoanDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    ScheduleType = table.Column<string>(type: "text", nullable: false),
+                    ScheduleType = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
                     Interest = table.Column<decimal>(type: "numeric", nullable: false),
                     PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
                     RegionId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -313,10 +305,10 @@ namespace App.DAL.EF.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Company = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     Ticker = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    Comment = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Comment = table.Column<string>(type: "text", nullable: true),
                     RegionId = table.Column<Guid>(type: "uuid", nullable: true),
                     PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IndustryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IndustryId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
@@ -450,11 +442,6 @@ namespace App.DAL.EF.Migrations
                 name: "IX_Cashes_PortfolioId",
                 table: "Cashes",
                 column: "PortfolioId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Industries_AppUserId",
-                table: "Industries",
-                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loans_PortfolioId",

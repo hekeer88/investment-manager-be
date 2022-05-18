@@ -66,7 +66,7 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
-            regionFromDb.Name.SetTranslation(industry.Name);
+            // regionFromDb.Name.SetTranslation(industry.Name);
             
             _context.Entry(industry).State = EntityState.Modified;
 

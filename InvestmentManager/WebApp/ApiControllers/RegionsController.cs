@@ -68,8 +68,8 @@ namespace WebApp.ApiControllers
             {
                 return NotFound();
             }
-            regionFromDb.Country.SetTranslation(region.Country);
-            regionFromDb.Continent.SetTranslation(region.Continent);
+            // regionFromDb.Country.SetTranslation(region.Country);
+            // regionFromDb.Continent.SetTranslation(region.Continent);
 
             _context.Entry(region).State = EntityState.Modified;
 

@@ -24,8 +24,7 @@ namespace WebApp.Areas.Admin.Controllers
         // GET: Admin/Industries
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Industries.Include(i => i.AppUser);
-            return View(await appDbContext.ToListAsync());
+            return View(await _context.Industries.ToListAsync());
         }
 
         // GET: Admin/Industries/Details/5
@@ -37,7 +36,6 @@ namespace WebApp.Areas.Admin.Controllers
             }
 
             var industry = await _context.Industries
-                .Include(i => i.AppUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (industry == null)
             {
@@ -68,7 +66,6 @@ namespace WebApp.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", industry.AppUserId);
             return View(industry);
         }
 
@@ -85,7 +82,6 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", industry.AppUserId);
             return View(industry);
         }
 
@@ -121,7 +117,7 @@ namespace WebApp.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", industry.AppUserId);
+            
             return View(industry);
         }
 
@@ -134,7 +130,6 @@ namespace WebApp.Areas.Admin.Controllers
             }
 
             var industry = await _context.Industries
-                .Include(i => i.AppUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (industry == null)
             {
