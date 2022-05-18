@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Transactions;
 using Base.Domain;
 
-namespace App.Domain;
+namespace App.Public.DTO.v1;
 
 public class Price : DomainEntityMetaId
 {
