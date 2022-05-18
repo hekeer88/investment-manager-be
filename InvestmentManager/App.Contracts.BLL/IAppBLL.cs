@@ -10,4 +10,5 @@ public interface IAppBLL : IBLL
     IPortfolioService Portfolios { get; }
     IStockService Stocks { get; }
     ILoanService Loans { get; }
+    ICashService Cashes { get; }
 }

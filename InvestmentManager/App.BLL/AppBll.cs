@@ -37,21 +37,31 @@ public class AppBLL : BaseBll<IAppUnitOfWork>, IAppBLL
     }
     
     private IPortfolioService? _portfolios;
-    
     public IPortfolioService Portfolios =>
         _portfolios ??= new PortfolioService(
             UnitOfWork.Portfolios, 
             new PortfolioMapper(_bllMapper),
             new Public.DTO.Mappers.PortfolioMapper(_publicMapper));
     
-    
     private IStockService? _socks;
     public IStockService Stocks =>
-        _socks ??= new StockService(UnitOfWork.Stocks, new Mappers.StockMapper(_bllMapper),
+        _socks ??= new StockService(
+            UnitOfWork.Stocks, 
+            new Mappers.StockMapper(_bllMapper),
             new Public.DTO.Mappers.StockMapper(_publicMapper));
     
     private ILoanService? _loans;
     public ILoanService Loans =>
-        _loans ??= new LoanService(UnitOfWork.Loans, new Mappers.LoanMapper(_bllMapper),
+        _loans ??= new LoanService(
+            UnitOfWork.Loans, 
+            new Mappers.LoanMapper(_bllMapper),
             new Public.DTO.Mappers.LoanMapper(_publicMapper));
+    
+    private ICashService? _cash;
+    public ICashService Cashes =>
+        _cash ??= new CashService(
+            UnitOfWork.Cashes, 
+            new Mappers.CashMapper(_bllMapper),
+            new Public.DTO.Mappers.CashMapper(_publicMapper));
+    
 }

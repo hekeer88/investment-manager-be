@@ -19,12 +19,17 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
     private  IPortfolioRepository? _portfolios;
     public virtual IPortfolioRepository Portfolios => _portfolios ??= new PortfolioRepository(UOWDbContext, new PortfolioMapper(_mapper));
     
-    //TODO: selliselt teha k6ik repod
     private  IStockRepository? _stocks;
     public virtual IStockRepository Stocks => _stocks ??= new StockRepository(UOWDbContext, new StockMapper(_mapper));
     
     private  ILoanRepository? _loans;
     public virtual ILoanRepository Loans => _loans ??= new LoanRepository(UOWDbContext, new LoanMapper(_mapper));
 
+    private ICashRepository? _cash;
+    public virtual ICashRepository Cashes => _cash ??= new CashRepository(UOWDbContext, new CashMapper(_mapper));
     
+    public IIndustryRepository Industries { get; }
+    public IRegionRepository Regions { get; }
+    public IPriceRepository Prices { get; }
+    public ITransactionRepository Transactions { get; }
 }
