@@ -41,10 +41,14 @@ namespace WebApp.ApiControllers
 
         // GET: api/Cashes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cash>> GetCash(Guid id)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Cash), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<App.Public.DTO.v1.Cash>> GetCash(Guid id)
         {
-            var cash = await _context.Cashes.FindAsync(id);
-
+            var cash = await _bll.Cashes.PublicFirstOrDefaultAsync(id);
+            
             if (cash == null)
             {
                 return NotFound();
@@ -56,22 +60,26 @@ namespace WebApp.ApiControllers
         // PUT: api/Cashes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCash(Guid id, Cash cash)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutCash(Guid id,  App.Public.DTO.v1.Cash cash)
         {
             if (id != cash.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cash).State = EntityState.Modified;
+            _bll.Cashes.Add(cash);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CashExists(id))
+                if (! await CashExists(id))
                 {
                     return NotFound();
                 }
@@ -87,33 +95,44 @@ namespace WebApp.ApiControllers
         // POST: api/Cashes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cash>> PostCash(Cash cash)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Cash), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Cash>> PostCash([FromBody] App.Public.DTO.v1.Cash cash)
         {
-            _context.Cashes.Add(cash);
-            await _context.SaveChangesAsync();
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            
+            _bll.Cashes.Add(cash);
+            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetCash", new { id = cash.Id }, cash);
+            return CreatedAtAction(
+                "GetCash",
+                new
+                {
+                    id = cash.Id,
+                    version = HttpContext.GetRequestedApiVersion()!.ToString()
+                }, cash);
         }
 
         // DELETE: api/Cashes/5
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteCash(Guid id)
         {
-            var cash = await _context.Cashes.FindAsync(id);
-            if (cash == null)
-            {
-                return NotFound();
-            }
-
-            _context.Cashes.Remove(cash);
-            await _context.SaveChangesAsync();
-
+            await _bll.Cashes.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool CashExists(Guid id)
+        private async Task<bool> CashExists(Guid id)
         {
-            return _context.Cashes.Any(e => e.Id == id);
+            return await _bll.Cashes.ExistsAsync(id);
         }
     }
 }
