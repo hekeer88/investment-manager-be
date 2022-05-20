@@ -71,7 +71,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Cashes.Add(cash);
+            _bll.Cashes.Update(cash);
 
             try
             {

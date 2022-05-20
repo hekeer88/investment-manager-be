@@ -57,7 +57,7 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     {
         return PublicMapper.Map(Update(PublicMapper.Map(entity)!))!;
     }
-    
+
     public TBllEntity Remove(TBllEntity entity)
     {
         return BLLMapper.Map(Repository.Remove(BLLMapper.Map(entity)!))!;
@@ -103,6 +103,13 @@ public class BaseEntityService<TPublicEntity, TBllEntity, TDalEntity, TRepositor
     public async Task<TBllEntity> RemoveAsync(TKey id)
     {
         return BLLMapper.Map(await Repository.RemoveAsync(id))!;
+    }
+    
+    
+    // TODO: GET all without user, DELETE later
+    public async Task<IEnumerable<TPublicEntity>> GetAll()
+    {
+        return (await GetAllAsync()).Select(x => PublicMapper.Map(x)!);
     }
     
 

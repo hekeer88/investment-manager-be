@@ -17,8 +17,8 @@ public class StockRepository : BaseEntityRepository<App.DAL.DTO.Stock, App.Domai
     {
         var query = CreateQuery(noTracking);
         query = query
-            .Include(s => s.Portfolio)
-            .Where(s => s.Portfolio.AppUserId == userId);
+            .Include(s => s.Portfolio);
+            // .Where(s => s.Portfolio.AppUserId == userId);
 
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
     }

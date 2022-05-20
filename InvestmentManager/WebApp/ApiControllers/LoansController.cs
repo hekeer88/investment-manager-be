@@ -31,6 +31,7 @@ namespace WebApp.ApiControllers
         public async Task<IEnumerable<App.Public.DTO.v1.Loan>> GetLoans()
         {
             return await _bll.Loans.PublicGetAllAsync(User.GetUserId());
+            // return await _bll.Loans.GetAll();
         }
 
 
@@ -67,7 +68,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Loans.Add(loan);
+            _bll.Loans.Update(loan);
 
             try
             {

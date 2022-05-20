@@ -17,5 +17,5 @@ public interface IEntityService<TPublicEntity, TEntity, TKey> : IEntityRepositor
 {
     TPublicEntity Add(TPublicEntity entity);
     TPublicEntity Update(TPublicEntity entity);
-
+    Task<IEnumerable<TPublicEntity>> GetAll();
 }

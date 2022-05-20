@@ -70,7 +70,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
-            _bll.Stocks.Add(stock);
+            _bll.Stocks.Update(stock);
 
             try
             {

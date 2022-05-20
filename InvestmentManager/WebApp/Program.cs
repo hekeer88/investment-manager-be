@@ -117,6 +117,21 @@ builder.Services.AddVersionedApiExplorer( options => options.GroupNameFormat = "
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen();
 
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsAllowAll",
+        policyBuilder =>
+        {
+            policyBuilder.AllowAnyOrigin();
+            policyBuilder.AllowAnyHeader();
+            policyBuilder.AllowAnyMethod();
+        });
+});
+
+
 // ====================== Pipeline setup and start of web ======================
 
 var app = builder.Build();
@@ -150,27 +165,7 @@ app.UseSwaggerUI(options =>
     // options.RoutePrefix = string.Empty;
 });
 
-
-
-
-
-// // CORS teema
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(name: "MyPolicy",
-//         policy =>
-//         {
-//             policy.WithOrigins("http://https://localhost:7209",
-//                     "https://https://localhost:3002")
-//                 .WithMethods("PUT", "DELETE", "GET");
-//         });
-// });
-//
-// app.UseCors();
-
-
-
-
+app.UseCors("CorsAllowAll");
 
 
 app.UseHttpsRedirection();
