@@ -116,7 +116,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<JwtResponse>> Register(Register registrationData)
+    public async Task<ActionResult<JwtResponse>> Register([FromBody] Register registrationData)
     {
         // verify user
         var appUser = await _userManager.FindByEmailAsync(registrationData.Email);
@@ -284,7 +284,7 @@ public class AccountController : ControllerBase
             _configuration["JWT:Key"],
             _configuration["JWT:Issuer"],
             _configuration["JWT:Issuer"],
-            DateTime.Now.AddMinutes(_configuration.GetValue<int>("JWT:ExpireInMinutes"))
+            DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JWT:ExpireInMinutes"))
         );
     
         // make new refresh token, obsolete old ones

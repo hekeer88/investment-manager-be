@@ -26,6 +26,20 @@ public class Stock : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Industry))]
     public Industry? Industry { get; set; }
     
+    // public virtual decimal? LoanSum
+    // {
+    //     get
+    //     {
+    //         return Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice;
+    //     }
+    // }
+
+    // public virtual decimal? LatestPrice
+    // {
+    //     get;
+    //     set;
+    // }
+
     
     // public Stock()
     // {

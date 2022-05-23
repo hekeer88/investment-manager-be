@@ -108,7 +108,11 @@ namespace WebApp.ApiControllers
             _bll.Stocks.Add(stock);
             await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetStock", new { id = stock.Id }, stock);
+            return CreatedAtAction("GetStock", new
+            {
+                id = stock.Id,
+                version = HttpContext.GetRequestedApiVersion()!.ToString()
+            }, stock);
         }
 
         // DELETE: api/Stocks/5
