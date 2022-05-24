@@ -7,5 +7,5 @@ public class Industry : DomainEntityMetaId
 {
 
     public string Name { get; set; } = default!;
-    public ICollection<Stock>? Stocks { get; set; }
+    // public ICollection<Stock>? Stocks { get; set; }
 }
