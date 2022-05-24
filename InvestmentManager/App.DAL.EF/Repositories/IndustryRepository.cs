@@ -16,7 +16,7 @@ public class IndustryRepository : BaseEntityRepository<App.DAL.DTO.Industry, App
     public async Task<IEnumerable<App.DAL.DTO.Industry>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         var query = CreateQuery(noTracking);
-        
+
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);
     }
     

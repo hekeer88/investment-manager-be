@@ -116,32 +116,77 @@ public static class AppDataHelper
         
         if (configuration.GetValue<bool>("DataInitialization:SeedData"))
         {
-            var regionEST = new Region
+            var regions = context.Regions.ToListAsync().Result;
+            if (regions.Count == 0)
             {
-                Country = "Estonia",
-                Continent = "Europe"
-            };
+                var regionEST = new Region
+                {
+                    Country = "Estonia",
+                    Continent = "Europe"
+                };
             
-            var regionLAV = new Region
-            {
-                Country = "LAV",
-                Continent = "Africa"
-            };
+                var regionLAV = new Region
+                {
+                    Country = "LAV",
+                    Continent = "Africa"
+                };
+                var regionFIN = new Region
+                {
+                    Country = "Finland",
+                    Continent = "Europe"
+                };
+                var regionNY = new Region
+                {
+                    Country = "New York",
+                    Continent = "America"
+                };
+                var regionCH = new Region
+                {
+                    Country = "China",
+                    Continent = "Asia"
+                };
+                context.Regions.Add(regionEST);
+                context.Regions.Add(regionLAV);
+                context.Regions.Add(regionFIN);
+                context.Regions.Add(regionNY);
+                context.Regions.Add(regionEST);
+                context.Regions.Add(regionCH);
+                context.SaveChanges();
+            } 
             
-            var telecommunication = new Industry
+            
+            var industries = context.Industries.ToListAsync().Result;
+            if (industries.Count == 0)
             {
-                Name = "Telecommunication"
-            };
-            var finance = new Industry
-            {
-                Name = "Financial Services"
-            };
+                var telecommunication = new Industry
+                {
+                    Name = "Telecommunication"
+                };
+                var finance = new Industry
+                {
+                    Name = "Finance"
+                };
+                var energy = new Industry
+                {
+                    Name = "Energy"
+                };
+                var health = new Industry
+                {
+                    Name = "Health Care"
+                };
+                var re = new Industry
+                {
+                    Name = "Real Estate"
+                };
 
-            context.Industries.Add(finance);
-            context.Industries.Add(telecommunication);
-            context.Regions.Add(regionEST);
-            context.Regions.Add(regionLAV);
-            context.SaveChanges();
+                context.Industries.Add(finance);
+                context.Industries.Add(telecommunication);
+                context.Industries.Add(energy);
+                context.Industries.Add(health);
+                context.Industries.Add(re);
+                
+                context.SaveChanges();
+            }
         }
         
     }

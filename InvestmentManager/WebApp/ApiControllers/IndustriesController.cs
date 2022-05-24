@@ -3,45 +3,51 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using WebApp.DTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion( "1.0" )]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class IndustriesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public IndustriesController(AppDbContext context)
+        public IndustriesController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Industries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IndustryDTO>>> GetIndustries()
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Industry>), 200)]
+        public async Task<IEnumerable<App.Public.DTO.v1.Industry>> GetIndustries()
         {
-            var result = (await _context.Industries.ToListAsync())
-                .Select(x => new IndustryDTO()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                })
-                .ToList();
-            return result;
+            return await _bll.Industries.PublicGetAllAsync(User.GetUserId());
         }
 
         // GET: api/Industries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Industry>> GetIndustry(Guid id)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Industry), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<App.Public.DTO.v1.Industry>> GetIndustry(Guid id)
         {
-            var industry = await _context.Industries.FindAsync(id);
+            var industry = await _bll.Industries.PublicFirstOrDefaultAsync(id);
 
             if (industry == null)
             {
@@ -54,29 +60,26 @@ namespace WebApp.ApiControllers
         // PUT: api/Industries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIndustry(Guid id, IndustryDTO industry)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutIndustry(Guid id,  App.Public.DTO.v1.Industry  industry)
         {
             if (id != industry.Id)
             {
                 return BadRequest();
             }
             
-            var regionFromDb = await _context.Industries.FindAsync(id);
-            if (regionFromDb == null)
-            {
-                return NotFound();
-            }
-            // regionFromDb.Name.SetTranslation(industry.Name);
+            _bll.Industries.Update(industry);
             
-            _context.Entry(industry).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IndustryExists(id))
+                if (!await IndustryExists(id))
                 {
                     return NotFound();
                 }
@@ -92,33 +95,44 @@ namespace WebApp.ApiControllers
         // POST: api/Industries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Industry>> PostIndustry(Industry industry)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Portfolio), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<App.Public.DTO.v1.Industry>> PostIndustry([FromBody] App.Public.DTO.v1.Industry industry)
         {
-            _context.Industries.Add(industry);
-            await _context.SaveChangesAsync();
+            
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            
+            _bll.Industries.Add(industry);
+            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetIndustry", new { id = industry.Id }, industry);
+            return CreatedAtAction(
+                "GetIndustry", new
+                {
+                    id = industry.Id,
+                    version = HttpContext.GetRequestedApiVersion()!.ToString()
+                }, industry);
         }
 
         // DELETE: api/Industries/5
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteIndustry(Guid id)
         {
-            var industry = await _context.Industries.FindAsync(id);
-            if (industry == null)
-            {
-                return NotFound();
-            }
-
-            _context.Industries.Remove(industry);
-            await _context.SaveChangesAsync();
-
+            await _bll.Industries.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool IndustryExists(Guid id)
+        private async Task<bool> IndustryExists(Guid id)
         {
-            return _context.Industries.Any(e => e.Id == id);
+            return await _bll.Industries.ExistsAsync(id);
         }
     }
 }

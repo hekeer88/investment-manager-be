@@ -4,6 +4,7 @@ using App.Contracts.DAL;
 using App.DAL.EF.Mappers;
 using Base.BLL;
 using Base.Contracts.Base;
+using Industry = App.Public.DTO.v1.Industry;
 using Portfolio = App.Public.DTO.v1.Portfolio;
 using PortfolioMapper = App.Public.DTO.Mappers.PortfolioMapper;
 
@@ -22,12 +23,9 @@ public class IndustryService: BaseEntityService<App.Public.DTO.v1.Industry, App.
     public async Task<IEnumerable<App.BLL.DTO.Industry>> GetAllAsync(Guid userId, bool noTracking = true)
     {
         
-        // business logic siin, nt nagu see n2ide mis teeb portfoli nime suureks
-        
         var res =
         (await Repository.GetAllAsync(userId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
         
-    
         return res;
     }
 
@@ -38,5 +36,11 @@ public class IndustryService: BaseEntityService<App.Public.DTO.v1.Industry, App.
         
         return res;
     }
+    
 
+    public async Task<Industry?> PublicFirstOrDefaultAsync(Guid industryId, bool noTracking = true)
+    {
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(industryId, noTracking));
+        return PublicMapper.Map(res);
+    }
 }

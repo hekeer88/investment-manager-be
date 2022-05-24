@@ -8,5 +8,5 @@ public interface IIndustryService :  IEntityService<App.Public.DTO.v1.Industry, 
     IIndustryCustom<App.BLL.DTO.Industry>
 {
     Task<IEnumerable<App.Public.DTO.v1.Industry>> PublicGetAllAsync(Guid userId, bool noTracking = true);
-    // Task<App.Public.DTO.v1.Region?> PublicFirstOrDefaultAsync(Guid portfolioId, bool noTracking = true);
+    Task<App.Public.DTO.v1.Industry?> PublicFirstOrDefaultAsync(Guid industryId, bool noTracking = true);
 } 
