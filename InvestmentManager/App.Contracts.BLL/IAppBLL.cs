@@ -11,4 +11,8 @@ public interface IAppBLL : IBLL
     IStockService Stocks { get; }
     ILoanService Loans { get; }
     ICashService Cashes { get; }
+    IRegionService Regions { get; }
+    IIndustryService Industries { get; }
+    IPriceService Prices { get; }
+    ITransactionService Transactions { get; }
 }

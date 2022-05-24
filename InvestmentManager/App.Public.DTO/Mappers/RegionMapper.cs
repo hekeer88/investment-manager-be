@@ -1,7 +1,7 @@
 using AutoMapper;
 using Base.DAL;
 
-namespace App.Public.DTO.v1.Mappers;
+namespace App.Public.DTO.Mappers;
 
 public class RegionMapper : BaseMapper<App.Public.DTO.v1.Region, App.BLL.DTO.Region>
 {

@@ -63,5 +63,37 @@ public class AppBLL : BaseBll<IAppUnitOfWork>, IAppBLL
             UnitOfWork.Cashes, 
             new Mappers.CashMapper(_bllMapper),
             new Public.DTO.Mappers.CashMapper(_publicMapper));
+
+    private IRegionService? _region;
+    public IRegionService Regions =>
+        _region ??= new RegionService(
+            UnitOfWork.Regions, 
+            new Mappers.RegionMapper(_bllMapper),
+            new Public.DTO.Mappers.RegionMapper(_publicMapper));
+    
+    
+    private IIndustryService? _industry;
+    public IIndustryService Industries =>
+        _industry ??= new IndustryService(
+            UnitOfWork.Industries, 
+            new Mappers.IndustryMapper(_bllMapper),
+            new Public.DTO.Mappers.IndustryMapper(_publicMapper));
+    
+    private IPriceService? _price;
+    public IPriceService Prices =>
+        _price ??= new PriceService(
+            UnitOfWork.Prices, 
+            new Mappers.PriceMapper(_bllMapper),
+            new Public.DTO.Mappers.PriceMapper(_publicMapper));
+    
+    
+    private ITransactionService? _transaction;
+    public ITransactionService Transactions =>
+        _transaction ??= new TransactionService(
+            UnitOfWork.Transactions, 
+            new Mappers.TransactionMapper(_bllMapper),
+            new Public.DTO.Mappers.TransactionMapper(_publicMapper));
+    
+    
     
 }
