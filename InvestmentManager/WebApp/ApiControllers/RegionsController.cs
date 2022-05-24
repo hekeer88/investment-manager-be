@@ -3,46 +3,52 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using WebApp.DTO;
+using Industry = App.Public.DTO.v1.Industry;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion( "1.0" )]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RegionsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public RegionsController(AppDbContext context)
+        public RegionsController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Regions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RegionDTO>>> GetRegions()
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Region>), 200)]
+        public async Task<IEnumerable<App.Public.DTO.v1.Region>> GetRegions()
         {
-            var result = (await _context.Regions.ToListAsync())
-                .Select(x => new RegionDTO()
-                {
-                    Id = x.Id,
-                    Country = x.Country,
-                    Continent = x.Continent
-                })
-                .ToList();
-            return result;
+            return await _bll.Regions.PublicGetAllAsync(User.GetUserId());
         }
 
         // GET: api/Regions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Region>> GetRegion(Guid id)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Region), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<App.Public.DTO.v1.Region>> GetRegion(Guid id)
         {
-            var region = await _context.Regions.FindAsync(id);
+            var region = await _bll.Regions.PublicFirstOrDefaultAsync(id);
 
             if (region == null)
             {
@@ -55,31 +61,26 @@ namespace WebApp.ApiControllers
         // PUT: api/Regions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegion(Guid id, RegionDTO region)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutRegion(Guid id, Industry region)
         {
             if (id != region.Id)
             {
                 return BadRequest();
             }
             
+            _bll.Industries.Update(region);
             
-            var regionFromDb = await _context.Regions.FindAsync(id);
-            if (regionFromDb == null)
-            {
-                return NotFound();
-            }
-            // regionFromDb.Country.SetTranslation(region.Country);
-            // regionFromDb.Continent.SetTranslation(region.Continent);
-
-            _context.Entry(region).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RegionExists(id))
+                if (!await RegionExists(id))
                 {
                     return NotFound();
                 }
@@ -95,33 +96,45 @@ namespace WebApp.ApiControllers
         // POST: api/Regions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Region>> PostRegion(Region region)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Region), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<App.Public.DTO.v1.Region>> PostRegion(
+            [FromBody ]App.Public.DTO.v1.Region region)
         {
-            _context.Regions.Add(region);
-            await _context.SaveChangesAsync();
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            
+            _bll.Regions.Add(region);
+            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetRegion", new { id = region.Id }, region);
+            return CreatedAtAction(
+                "GetRegion", new
+                {
+                    id = region.Id,
+                    version = HttpContext.GetRequestedApiVersion()!.ToString()
+                }, region);
         }
+        
 
         // DELETE: api/Regions/5
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteRegion(Guid id)
         {
-            var region = await _context.Regions.FindAsync(id);
-            if (region == null)
-            {
-                return NotFound();
-            }
-
-            _context.Regions.Remove(region);
-            await _context.SaveChangesAsync();
-
+            await _bll.Regions.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool RegionExists(Guid id)
+        private async Task<bool> RegionExists(Guid id)
         {
-            return _context.Regions.Any(e => e.Id == id);
+            return await _bll.Regions.ExistsAsync(id);
         }
     }
 }

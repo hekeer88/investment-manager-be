@@ -42,9 +42,9 @@ public class RegionService: BaseEntityService<App.Public.DTO.v1.Region, App.BLL.
         return res;
     }
     
-    // public async Task<Public.DTO.v1.Portfolio?> PublicFirstOrDefaultAsync(Guid portfolioId, bool noTracking = true)
-    // {
-    //     var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(portfolioId, noTracking));
-    //     return PublicMapper.Map(res);
-    // }
+    public async Task<Public.DTO.v1.Region?> PublicFirstOrDefaultAsync(Guid regionId, bool noTracking = true)
+    {
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(regionId, noTracking));
+        return PublicMapper.Map(res);
+    }
 }

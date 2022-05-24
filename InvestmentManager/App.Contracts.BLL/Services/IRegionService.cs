@@ -8,5 +8,5 @@ public interface IRegionService :  IEntityService<App.Public.DTO.v1.Region, App.
     IRegionCustom<App.BLL.DTO.Region>
 {
     Task<IEnumerable<App.Public.DTO.v1.Region>> PublicGetAllAsync(Guid userId, bool noTracking = true);
-    // Task<App.Public.DTO.v1.Region?> PublicFirstOrDefaultAsync(Guid portfolioId, bool noTracking = true);
+    Task<App.Public.DTO.v1.Region?> PublicFirstOrDefaultAsync(Guid regionId, bool noTracking = true);
 } 

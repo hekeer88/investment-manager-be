@@ -36,12 +36,12 @@ public class Loan : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(Interest))]
     public decimal Interest { get; set; } = default!;
     
-
     // public ICollection<Transaction>? Transactions { get; set; }
     
     public Guid PortfolioId { get; set; }
-    // public Portfolio? Portfolio { get; set; }
+    public virtual string? PortfolioName { get; set; }
     
     public Guid? RegionId { get; set; }
-    // public Region? Region { get; set; }
+    public virtual string? Country { get; set; }
+    public virtual string? Continent { get; set; }
 }
