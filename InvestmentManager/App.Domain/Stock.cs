@@ -13,6 +13,10 @@ public class Stock : DomainEntityMetaId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Comment))]
     public string? Comment { get; set; }
     
+    // public decimal LastPrice { get; set; }
+    // public decimal Quantity { get; set; }
+    public decimal? Balance { get; set; }
+    
     public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
     

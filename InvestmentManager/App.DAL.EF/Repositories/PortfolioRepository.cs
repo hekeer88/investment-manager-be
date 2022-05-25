@@ -24,7 +24,7 @@ public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, A
             .Include(p => p.AppUser)
             .Include(p => p.Stocks)
             .Include(p => p.Loans)
-            // .Include(p => p.Stocks.Select(s => s.Transactions))
+            .Include(p => p.Stocks)
             .Where(p => p.AppUserId == userId);
 
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);

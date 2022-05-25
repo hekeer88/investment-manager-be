@@ -24,6 +24,10 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
 
         foreach (var stock in res)
         {
+            var quantity = stock.Transactions?.Sum(t => t.Quantity) ?? 0;
+            var lastPrice = stock.Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
+            stock.Balance = quantity * lastPrice;
+            
             stock.Ticker = stock.Ticker.ToUpper();
         }
 

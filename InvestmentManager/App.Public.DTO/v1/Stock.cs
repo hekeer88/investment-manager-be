@@ -17,6 +17,8 @@ public class Stock : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Comment))]
     public string? Comment { get; set; }
     
+    public decimal? Balance { get; set; }
+    
     public virtual decimal? Quantity { get; set; }
     public virtual decimal? LatestPrice { get; set; }
 

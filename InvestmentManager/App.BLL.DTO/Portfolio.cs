@@ -16,7 +16,7 @@ public class Portfolio : DomainEntityId
     [MaxLength(512)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Portfolio), Name=nameof(Description))]
     public string? Description { get; set; }
-
+    
     public virtual decimal? LoanSum
     {
         get
@@ -24,15 +24,18 @@ public class Portfolio : DomainEntityId
             return Loans?.Sum(l => l.Amount) ?? 0;
         }
     }
-    
+
     public virtual decimal? StockSum
     {
         get
         {
-            return Stocks?.Sum(s => s.Quantity * s.LatestPrice);
+
+            return Stocks?.Sum(s => s.Balance) ?? 0;
         }
     }
-    
+
+
+
     public ICollection<Stock>? Stocks { get; set; }
     public ICollection<Loan>? Loans { get; set; }
     public ICollection<Cash>? Cashes { get; set; }

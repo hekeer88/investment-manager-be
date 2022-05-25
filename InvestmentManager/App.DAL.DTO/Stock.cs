@@ -12,6 +12,8 @@ public class Stock : DomainEntityId
     public string Ticker { get; set; } = default!;
     [MaxLength(256)]
     public string? Comment { get; set; }
+    
+    public decimal? Balance { get; set; }
 
     public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
