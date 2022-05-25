@@ -16,8 +16,10 @@ public class Stock : DomainEntityId
     [MaxLength(256)]
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Comment))]
     public string? Comment { get; set; }
+    
+    public virtual decimal? Quantity { get; set; }
 
-    public ICollection<Price> Prices { get; set; } = new List<Price>();
+    // public ICollection<Price> Prices { get; set; } = new List<Price>();
     // public ICollection<Transaction>? Transactions { get; set; }
     public Guid? RegionId { get; set; }
     public Region? Region { get; set; }

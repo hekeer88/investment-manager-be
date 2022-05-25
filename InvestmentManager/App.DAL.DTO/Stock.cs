@@ -13,7 +13,7 @@ public class Stock : DomainEntityId
     [MaxLength(256)]
     public string? Comment { get; set; }
 
-    public ICollection<Price>? Prices { get; set; } = new List<Price>();
+    public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
     
     public Guid? RegionId { get; set; }

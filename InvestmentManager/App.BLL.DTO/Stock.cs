@@ -26,11 +26,11 @@ public class Stock : DomainEntityId
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Industry))]
     public Industry? Industry { get; set; }
     
-    public virtual decimal? LoanSum
+    public virtual decimal? Quantity
     {
         get
         {
-            return Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice;
+            return Transactions?.Sum(t => t.Quantity) ?? 0;
         }
     }
 
