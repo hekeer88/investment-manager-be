@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using App.BLL.DTO;
 using Microsoft.AspNetCore.Mvc.Testing;
+using NuGet.Common;
 using Tests.WebApp;
 using Tests.WebApp.Helpers;
 using WebApp.DTO.Identity;
@@ -31,11 +32,10 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
             }
         );
     }
-
     
     
     [Fact]
-    public async Task Get_Portfolio_Index()
+    public async Task Get_Portfolios()
     {
         // Arrange
 
@@ -44,35 +44,12 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        
-        // var responseContent = await HtmlHelpers.GetDocumentAsync(response);
-        
-        //  add .id-table-foobars-row in table class tag
-        // var tableRows = responseContent.QuerySelectorAll(".id-table-foobars-row");
-    }
-    
-    [Fact]
-    public async Task Get_Portfolio_Test()
-    {
-        // Arrange
 
-        // Act
-        var response = await _client.GetAsync("/api/v1/portfolios");
-
-        var content = await response.Content.ReadAsStringAsync();
-
-        
-        // maybe domain.Portfolio
-        var resultData = System.Text.Json.JsonSerializer.Deserialize<List<Portfolio>>(content);
-        
-        Assert.NotNull(resultData);
-        Assert.Single(resultData);
+        await Post_Register();
     }
     
     
-    
-    [Fact]
-    public async Task Get_FooBars_API_Returns_Single_Element()
+    public async Task Post_Register()
     {
         // Arrange
         var registerDto = new Register()
@@ -94,16 +71,15 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
         requestContent,
         new JsonSerializerOptions() {PropertyNamingPolicy = JsonNamingPolicy.CamelCase}
         );
-        //
-        //
+        
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultJwt!.Token);
+
         var apiRequest = new HttpRequestMessage();
         apiRequest.Method = HttpMethod.Get;
         apiRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        apiRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resultJwt!.Token);
         apiRequest.RequestUri = new Uri("/api/v1/portfolios/");
         
-        
-        //Act
+        // Act
         var apiResponse = await _client.SendAsync(apiRequest);
         
         // Assert
@@ -113,8 +89,40 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
         var resultData = System.Text.Json.JsonSerializer.Deserialize<List<Portfolio>>(content);
         Assert.NotNull(resultData);
         Assert.Empty(resultData);
+        
+        await Post_New_Portfolio();
     }
     
-    
+    public async Task Post_New_Portfolio()
+    {
+        
+        // Arrange
+        var newPortfolio = new Portfolio()
+        {
+            Name = "New Test Portfolio",
+            Description = "Test Description",
+        };
+        
+        var portfolioStr = System.Text.Json.JsonSerializer.Serialize(newPortfolio);
+        var portfolio = new StringContent(portfolioStr, Encoding.UTF8, "application/json");
+
+        
+        var apiRequest = new HttpRequestMessage();
+        apiRequest.Method = HttpMethod.Post;
+        apiRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        // apiRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resultJwt!.Token);
+        apiRequest.RequestUri = new Uri("/api/v1/portfolios/");
+        apiRequest.Content = portfolio;
+        
+        //Act
+        var apiResponse = await _client.SendAsync(apiRequest);
+        
+        // Assert
+        apiResponse.EnsureSuccessStatusCode();
+        
+        var content = await apiResponse.Content.ReadAsStringAsync();
+        var resultData = System.Text.Json.JsonSerializer.Deserialize<Portfolio>(content);
+        Assert.NotNull(resultData);
+    }
     
 }
