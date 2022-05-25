@@ -24,11 +24,12 @@ public class Portfolio : DomainEntityId
             return Loans?.Sum(l => l.Amount) ?? 0;
         }
     }
+    
     public virtual decimal? StockSum
     {
         get
         {
-            return Stocks?.Sum(s => s.Quantity * s.LatestPrice) ?? 0;
+            return Stocks?.Sum(s => s.Quantity * s.LatestPrice);
         }
     }
     

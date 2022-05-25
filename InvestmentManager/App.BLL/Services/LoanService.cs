@@ -15,26 +15,19 @@ public class LoanService: BaseEntityService<App.Public.DTO.v1.Loan, App.BLL.DTO.
     {
     }
 
-    public async Task<IEnumerable<App.BLL.DTO.Loan>> GetAllAsync(Guid portfolioId, bool noTracking = true)
+    public async Task<IEnumerable<App.BLL.DTO.Loan>> GetAllAsync(Guid loanId, bool noTracking = true)
     {
         var res =
-            (await Repository.GetAllAsync(portfolioId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
-
-        foreach (var loan in res)
-        {
-            // loan.PortfolioName = loan.Portfolio?.Name;
-            // loan.Country = loan.Region?.Country;
-            // loan.Continent = loan.Region?.Continent;
-        }
-
+            (await Repository.GetAllAsync(loanId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
+        
         return res;
 
     }
 
-    public async Task<IEnumerable<Public.DTO.v1.Loan>> PublicGetAllAsync(Guid portfolioId, bool noTracking = true)
+    public async Task<IEnumerable<Public.DTO.v1.Loan>> PublicGetAllAsync(Guid userId, bool noTracking = true)
     {
         var res =
-            (await GetAllAsync()).Select(l => PublicMapper.Map(l)!).ToList();
+            (await GetAllAsync(userId)).Select(l => PublicMapper.Map(l)!).ToList();
         
         return res;
     }

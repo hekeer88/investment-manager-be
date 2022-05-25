@@ -22,8 +22,8 @@ public class PortfolioRepository : BaseEntityRepository<App.DAL.DTO.Portfolio, A
         var query = CreateQuery(noTracking);
         query = query
             .Include(p => p.AppUser)
+            .Include(p => p.Stocks)
             .Include(p => p.Loans)
-            // .Include(p => p.Stocks)
             // .Include(p => p.Stocks.Select(s => s.Transactions))
             .Where(p => p.AppUserId == userId);
 
