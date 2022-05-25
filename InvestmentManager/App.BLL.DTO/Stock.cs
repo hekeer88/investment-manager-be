@@ -13,7 +13,7 @@ public class Stock : DomainEntityId
     [MaxLength(256)]
     public string? Comment { get; set; }
 
-    public ICollection<Price>? Prices { get; set; } = new List<Price>();
+    public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
     
     public Guid? RegionId { get; set; }
@@ -34,23 +34,15 @@ public class Stock : DomainEntityId
         }
     }
 
-    // public virtual decimal? LatestPrice
-    // {
-    //     get;
-    //     set;
-    // }
+    public virtual decimal? LatestPrice
+    {
+        get
+        {
+            return Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
+        }
+    }
 
     
-    // public Stock()
-    // {
-    //     var initialPrice = new Price()
-    //     {
-    //         CurrentPrice = 0.0m,
-    //         PriceTime = DateTime.UtcNow
-    //     };
-    //     Prices.Add(initialPrice);
-    // }
-    //
     // public Price GetLastPrice()
     // {
     //     return Prices.OrderByDescending(x => x.PriceTime).FirstOrDefault()!;

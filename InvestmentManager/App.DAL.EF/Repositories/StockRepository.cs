@@ -21,6 +21,7 @@ public class StockRepository : BaseEntityRepository<App.DAL.DTO.Stock, App.Domai
             .Include(s => s.Industry)
             .Include(s => s.Region)
             .Include(s => s.Transactions)
+            .Include(s => s.Prices)
             .Where(s => s.Portfolio.AppUserId == userId);
 
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);

@@ -18,6 +18,7 @@ public class Stock : DomainEntityId
     public string? Comment { get; set; }
     
     public virtual decimal? Quantity { get; set; }
+    public virtual decimal? LatestPrice { get; set; }
 
     // public ICollection<Price> Prices { get; set; } = new List<Price>();
     // public ICollection<Transaction>? Transactions { get; set; }

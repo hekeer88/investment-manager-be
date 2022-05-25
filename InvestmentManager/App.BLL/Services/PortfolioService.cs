@@ -31,12 +31,7 @@ public class PortfolioService: BaseEntityService<App.Public.DTO.v1.Portfolio, Ap
         
         var res =
         (await Repository.GetAllAsync(userId, noTracking)).Select(x => BLLMapper.Map(x)!).ToList();
-    
-        foreach (var portfolio in res)
-        {
-            portfolio.Name = portfolio.Name.ToUpper();
-        }
-    
+
         return res;
     }
 
