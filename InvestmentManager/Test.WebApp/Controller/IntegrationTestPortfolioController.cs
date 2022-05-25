@@ -35,7 +35,7 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
     
     
     [Fact]
-    public async Task Get_Portfolios()
+    public async Task Get_Portfolios_UnAuthorized()
     {
         // Arrange
 
@@ -110,7 +110,6 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
         var apiRequest = new HttpRequestMessage();
         apiRequest.Method = HttpMethod.Post;
         apiRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        // apiRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resultJwt!.Token);
         apiRequest.RequestUri = new Uri("/api/v1/portfolios/");
         apiRequest.Content = portfolio;
         
@@ -122,7 +121,72 @@ public class IntegrationTestPortfolioController : IClassFixture<CustomWebApplica
         
         var content = await apiResponse.Content.ReadAsStringAsync();
         var resultData = System.Text.Json.JsonSerializer.Deserialize<Portfolio>(content);
+        var id = resultData?.Id;
         Assert.NotNull(resultData);
+        
+        await Get_Portfolios();
     }
-    
+
+    public async Task Get_Portfolios()
+    {
+        // Arrange
+        var apiRequest = new HttpRequestMessage();
+        apiRequest.Method = HttpMethod.Get;
+        apiRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        apiRequest.RequestUri = new Uri("/api/v1/portfolios/");
+        
+        
+        // Act
+        var apiResponse = await _client.SendAsync(apiRequest);
+
+        // Assert
+        apiResponse.EnsureSuccessStatusCode();
+        var content = await apiResponse.Content.ReadAsStringAsync();
+        var resultData = System.Text.Json.JsonSerializer.Deserialize<List<Portfolio>>(content);
+        Assert.NotNull(resultData);
+        Assert.Single(resultData);
+        
+        await Post_Second_Portfolio();
+    }
+
+    public async Task? Post_Second_Portfolio()
+    {
+        
+        // Arrange
+        var newPortfolio = new Portfolio()
+        {
+            Name = "Second Test Portfolio",
+            Description = "2nd Description",
+        };
+        
+        var portfolioStr = System.Text.Json.JsonSerializer.Serialize(newPortfolio);
+        var portfolio = new StringContent(portfolioStr, Encoding.UTF8, "application/json");
+
+        
+        var postRequest = new HttpRequestMessage();
+        postRequest.Method = HttpMethod.Post;
+        postRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        postRequest.RequestUri = new Uri("/api/v1/portfolios/");
+        postRequest.Content = portfolio;
+        
+        var getRequest = new HttpRequestMessage();
+        getRequest.Method = HttpMethod.Get;
+        getRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        getRequest.RequestUri = new Uri("/api/v1/portfolios/");
+        
+        //Act
+        var postResponse = await _client.SendAsync(postRequest);
+        var getResponse = await _client.SendAsync(getRequest);
+        
+        // Assert
+        postResponse.EnsureSuccessStatusCode();
+        getResponse.EnsureSuccessStatusCode();
+        
+        getResponse.EnsureSuccessStatusCode();
+        var content = await getResponse.Content.ReadAsStringAsync();
+        var resultData = System.Text.Json.JsonSerializer.Deserialize<List<Portfolio>>(content);
+        
+        Assert.NotNull(resultData);
+        Assert.Equal(2, resultData.Count);
+    }
 }
