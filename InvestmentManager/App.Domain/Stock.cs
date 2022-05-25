@@ -12,8 +12,8 @@ public class Stock : DomainEntityMetaId
     public string Ticker { get; set; } = default!;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Stock), Name=nameof(Comment))]
     public string? Comment { get; set; }
-
-    public ICollection<Price>? Prices { get; set; } = new List<Price>();
+    
+    public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
     
     public Guid? RegionId { get; set; }
@@ -22,6 +22,8 @@ public class Stock : DomainEntityMetaId
     public Portfolio? Portfolio { get; set; }
     public Guid? IndustryId { get; set; }
     public Industry? Industry { get; set; }
+    
+    
     
     
     // public Stock()

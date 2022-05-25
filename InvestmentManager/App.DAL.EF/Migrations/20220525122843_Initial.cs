@@ -212,7 +212,7 @@ namespace App.DAL.EF.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,11 +268,11 @@ namespace App.DAL.EF.Migrations
                     LoanName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     BorrowerName = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     ContractNumber = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    Collateral = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
+                    Collateral = table.Column<bool>(type: "boolean", nullable: false),
                     LoanDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    ScheduleType = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
+                    ScheduleType = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
                     Interest = table.Column<decimal>(type: "numeric", nullable: false),
                     PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
                     RegionId = table.Column<Guid>(type: "uuid", nullable: false),

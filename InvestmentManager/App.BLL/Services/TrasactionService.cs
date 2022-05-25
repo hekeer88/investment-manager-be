@@ -6,6 +6,7 @@ using Base.BLL;
 using Base.Contracts.Base;
 using Portfolio = App.Public.DTO.v1.Portfolio;
 using PortfolioMapper = App.Public.DTO.Mappers.PortfolioMapper;
+using Transaction = App.Public.DTO.v1.Transaction;
 
 namespace App.BLL.Services;
 
@@ -36,4 +37,9 @@ public class TransactionService: BaseEntityService<App.Public.DTO.v1.Transaction
         return res;
     }
 
+    public async Task<Transaction?> PublicFirstOrDefaultAsync(Guid transactionId, bool noTracking = true)
+    {
+        var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(transactionId, noTracking));
+        return PublicMapper.Map(res);
+    }
 }

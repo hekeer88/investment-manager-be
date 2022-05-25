@@ -25,7 +25,6 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         foreach (var stock in res)
         {
             stock.Company = stock.Company.ToUpper();
-            // Logic here
         }
 
         return res;

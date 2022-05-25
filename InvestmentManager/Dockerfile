@@ -29,6 +29,7 @@ COPY Base.Contracts.DAL/*.csproj ./Base.Contracts.DAL/
 COPY Base.Contracts.Domain/*.csproj ./Base.Contracts.Domain/
 
 COPY App.Resources/*.csproj ./App.Resources/
+COPY Test.WebApp/*.csproj ./Test.WebApp/
   
 # create the first layer with just niget packages installed
 RUN dotnet restore
@@ -58,6 +59,7 @@ COPY Base.Contracts.DAL/. ./Base.Contracts.DAL/
 COPY Base.Contracts.Domain/. ./Base.Contracts.Domain/
 
 COPY App.Resources/. ./App.Resources/
+COPY Test.WebApp/. ./Test.WebApp/
 
 WORKDIR /app/WebApp
 

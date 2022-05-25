@@ -22,9 +22,9 @@ public class LoanService: BaseEntityService<App.Public.DTO.v1.Loan, App.BLL.DTO.
 
         foreach (var loan in res)
         {
-            loan.PortfolioName = loan.Portfolio?.Name;
-            loan.Country = loan.Region?.Country;
-            loan.Continent = loan.Region?.Continent;
+            // loan.PortfolioName = loan.Portfolio?.Name;
+            // loan.Country = loan.Region?.Country;
+            // loan.Continent = loan.Region?.Continent;
         }
 
         return res;

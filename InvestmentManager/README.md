@@ -9,6 +9,9 @@ dotnet ef database drop --project App.DAL.EF --startup-project WebApp
 ~~~
 
 
+
+
+
 Web Controllers
 keep this controllers for testing what is db for example
 ~~~sh

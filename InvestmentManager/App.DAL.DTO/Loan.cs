@@ -19,7 +19,7 @@ public class Loan : DomainEntityId
     public string ContractNumber { get; set; } = default!;
     
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(Collateral))]
-    public string Collateral { get; set; } = default!;
+    public bool Collateral { get; set; } = false;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(LoanDate))]
     public DateTime LoanDate { get; set; } = default!;
     [Display(ResourceType = typeof(App.Resources.App.Domain.Loan), Name = nameof(EndDate))]

@@ -20,6 +20,7 @@ public class LoanRepository : BaseEntityRepository<App.DAL.DTO.Loan, App.Domain.
         var query = CreateQuery(noTracking);
         query = query
             .Include(l => l.Portfolio)
+            .Include(l => l.Region)
             .Where(l => l.Portfolio.AppUserId == userId);
         
         return (await query.ToListAsync()).Select(x=>Mapper.Map(x)!);

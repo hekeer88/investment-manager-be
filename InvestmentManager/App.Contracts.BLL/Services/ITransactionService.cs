@@ -8,5 +8,5 @@ public interface ITransactionService :  IEntityService<App.Public.DTO.v1.Transac
     ITransactionCustom<App.BLL.DTO.Transaction>
 {
     Task<IEnumerable<App.Public.DTO.v1.Transaction>> PublicGetAllAsync(Guid userId, bool noTracking = true);
-    // Task<App.Public.DTO.v1.Portfolio?> PublicFirstOrDefaultAsync(Guid portfolioId, bool noTracking = true);
+    Task<App.Public.DTO.v1.Transaction?> PublicFirstOrDefaultAsync(Guid transactionId, bool noTracking = true);
 } 

@@ -13,13 +13,13 @@ public class Loan : DomainEntityMetaId
     public string BorrowerName { get; set; } = default!;
     [MaxLength(32)]
     public string ContractNumber { get; set; } = default!;
-    [MaxLength(1)]
-    public string Collateral { get; set; } = default!;
+
+    public bool Collateral { get; set; } = false;
     public DateTime LoanDate { get; set; } = default!;
     public DateTime EndDate { get; set; } = default!;
     [Range(0, 9999999999.99)]
     public decimal Amount { get; set; } = default!;
-    [MaxLength(1)]
+    [MaxLength(6)]
     public string ScheduleType { get; set; } = default!;
     public decimal Interest { get; set; } = default!;
     public ICollection<Transaction>? Transactions { get; set; }

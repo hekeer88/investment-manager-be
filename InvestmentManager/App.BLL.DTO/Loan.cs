@@ -10,7 +10,7 @@ public class Loan : DomainEntityId
     [MaxLength(64)] public string BorrowerName { get; set; } = default!;
     [MaxLength(32)] public string ContractNumber { get; set; } = default!;
 
-    public string Collateral { get; set; } = default!;
+    public bool Collateral { get; set; } = false;
     public DateTime LoanDate { get; set; } = default!;
     public DateTime EndDate { get; set; } = default!;
 
@@ -23,10 +23,10 @@ public class Loan : DomainEntityId
 
     public Guid PortfolioId { get; set; }
     public Portfolio? Portfolio { get; set; }
-    public virtual string? PortfolioName { get; set; }
+    // public virtual string? PortfolioName { get; set; }
     
     public Guid RegionId { get; set; }
     public Region? Region { get; set; }
-    public virtual string? Country { get; set; }
-    public virtual string? Continent { get; set; }
+    // public virtual string? Country { get; set; }
+    // public virtual string? Continent { get; set; }
 }
