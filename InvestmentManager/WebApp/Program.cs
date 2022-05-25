@@ -189,3 +189,8 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+// Needed for integration testing. Do not write anything here
+public partial class Program
+{
+}

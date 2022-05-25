@@ -44,7 +44,7 @@ COPY App.DAL.EF/. ./App.DAL.EF/
 COPY App.Domain/. ./App.Domain/
 COPY App.Public.DTO/. ./App.Public.DTO/
 COPY WebApp/. ./WebApp/
-COPY WebApp/appsettings.docker.json ./WebApp/appsettings.json
+#COPY WebApp/appsettings.docker.json ./WebApp/appsettings.json
 
 COPY Base.BLL/. ./Base.BLL/
 COPY Base.DAL/. ./Base.DAL/

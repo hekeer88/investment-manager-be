@@ -26,6 +26,10 @@ public static class AppDataHelper
         {
             throw new ApplicationException("No db context");
         }
+        
+        if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory") return;
+        
+        
         // TODO: check database state
         //can't connect - wrong address
         //can't connect - wrong user/pass
