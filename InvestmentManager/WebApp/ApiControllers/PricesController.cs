@@ -3,37 +3,50 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Contracts.BLL;
 using App.DAL.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Base.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion( "1.0" )]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PricesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public PricesController(AppDbContext context)
+        public PricesController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
         // GET: api/Prices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Price>>> GetPrices()
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<App.Public.DTO.v1.Price>), 200)]
+        public async Task<IEnumerable<App.Public.DTO.v1.Price>> GetPrices()
         {
-            return await _context.Prices.ToListAsync();
+            return await _bll.Prices.PublicGetAllAsync(User.GetUserId());
         }
 
         // GET: api/Prices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Price>> GetPrice(Guid id)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Price), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<App.Public.DTO.v1.Price>> GetPrice(Guid id)
         {
-            var price = await _context.Prices.FindAsync(id);
+            var price = await _bll.Prices.PublicFirstOrDefaultAsync(id);
 
             if (price == null)
             {
@@ -46,22 +59,26 @@ namespace WebApp.ApiControllers
         // PUT: api/Prices/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrice(Guid id, Price price)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutPrice(Guid id, App.Public.DTO.v1.Price price)
         {
             if (id != price.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(price).State = EntityState.Modified;
+            _bll.Prices.Update(price);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bll.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PriceExists(id))
+                if (!await PriceExists(id))
                 {
                     return NotFound();
                 }
@@ -77,33 +94,41 @@ namespace WebApp.ApiControllers
         // POST: api/Prices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Price>> PostPrice(Price price)
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(App.Public.DTO.v1.Price), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<App.Public.DTO.v1.Price>> PostPrice(App.Public.DTO.v1.Price price)
         {
-            _context.Prices.Add(price);
-            await _context.SaveChangesAsync();
+            if (HttpContext.GetRequestedApiVersion() == null)
+            {
+                return BadRequest("Api version is mandatory");
+            }
+            _bll.Prices.Add(price);
+            await _bll.SaveChangesAsync();
 
-            return CreatedAtAction("GetPrice", new { id = price.Id }, price);
+            return CreatedAtAction("GetPrice", new
+            {
+                id = price.Id,
+                version = HttpContext.GetRequestedApiVersion()!.ToString()
+            }, price);
         }
 
         // DELETE: api/Prices/5
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeletePrice(Guid id)
         {
-            var price = await _context.Prices.FindAsync(id);
-            if (price == null)
-            {
-                return NotFound();
-            }
-
-            _context.Prices.Remove(price);
-            await _context.SaveChangesAsync();
-
+            await _bll.Prices.RemoveAsync(id);
+            await _bll.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool PriceExists(Guid id)
+        private async Task<bool> PriceExists(Guid id)
         {
-            return _context.Prices.Any(e => e.Id == id);
+            return await _bll.Prices.ExistsAsync(id);
         }
     }
 }

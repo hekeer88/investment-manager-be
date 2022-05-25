@@ -11,7 +11,6 @@ public class Price : DomainEntityMetaId
     public decimal CurrentPrice { get; set; } = default!;
     public DateTime PriceTime { get; set; } = default;
     
-    //TODO: tagasiviide?
     public Guid StockId { get; set; }
     public Stock? Stock { get; set; }
 

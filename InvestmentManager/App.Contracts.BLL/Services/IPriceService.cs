@@ -8,5 +8,5 @@ public interface IPriceService :  IEntityService<App.Public.DTO.v1.Price, App.BL
     IIndustryCustom<App.BLL.DTO.Price>
 {
     Task<IEnumerable<App.Public.DTO.v1.Price>> PublicGetAllAsync(Guid userId, bool noTracking = true);
-    // Task<App.Public.DTO.v1.Region?> PublicFirstOrDefaultAsync(Guid portfolioId, bool noTracking = true);
+    Task<App.Public.DTO.v1.Price?> PublicFirstOrDefaultAsync(Guid priceId, bool noTracking = true);
 } 
