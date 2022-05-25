@@ -15,6 +15,7 @@ public class Portfolio : DomainEntityId
     public string? Description { get; set; }
     
     public virtual decimal? LoanSum { get; set; }
+    public virtual decimal? StockSum { get; set; }
     
     public Guid? AppUserId { get; set; }
 }
