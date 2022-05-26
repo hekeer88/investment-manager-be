@@ -30,6 +30,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Cashes
+        /// <summary>
+        /// Get all Cash entities related with user
+        /// </summary>
+        /// <returns>List of cash entities</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -40,6 +44,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Cashes/5
+        /// <summary>
+        /// Get Cash entity by cash ID
+        /// </summary>
+        /// <param name="id">Cash id</param>
+        /// <returns>Cash entity by id</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -58,7 +67,12 @@ namespace WebApp.ApiControllers
         }
 
         // PUT: api/Cashes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change cash entity
+        /// </summary>
+        /// <param name="id">Cash id</param>
+        /// <param name="cash">Cash entity that need to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -94,6 +108,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Cashes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Cash entity
+        /// </summary>
+        /// <param name="cash">Supply - currency, portfolioId </param>
+        /// <returns>New Cash Entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -119,6 +138,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Cashes/5
+        /// <summary>
+        /// Deletes Cash entity by id
+        /// </summary>
+        /// <param name="id">Cash id</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

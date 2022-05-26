@@ -24,6 +24,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Loans
+        /// <summary>
+        /// Get all Loan entities by user.
+        /// </summary>
+        /// <returns>Returns all Loan entities by related user</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -36,6 +40,11 @@ namespace WebApp.ApiControllers
 
 
         // GET: api/Loans/5
+        /// <summary>
+        /// Get Loan entity by id
+        /// </summary>
+        /// <param name="id">Loan entity id</param>
+        /// <returns>Loan entity by id</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -56,6 +65,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Loans/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Loan entity by id
+        /// </summary>
+        /// <param name="id">Loan entity id that need to be changed</param>
+        /// <param name="loan">Loan entity that need to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -91,6 +106,12 @@ namespace WebApp.ApiControllers
 
         // POST: api/Loans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Loan entity in database
+        /// </summary>
+        /// <param name="loan">Provide Loan name, borrower name, contract number, collateral(yes/no), loan date,
+        /// due date, amount, schedule type, interest and portfolio id</param>
+        /// <returns>Newly created Loan entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -118,6 +139,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Loans/5
+        /// <summary>
+        /// Delete entity by id
+        /// </summary>
+        /// <param name="id">Loan entity id that needs to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

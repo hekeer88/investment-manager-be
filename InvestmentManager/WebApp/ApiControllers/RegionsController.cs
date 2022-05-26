@@ -31,6 +31,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Regions
+        /// <summary>
+        /// Get all Region entites
+        /// </summary>
+        /// <returns>All Region entities</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -41,6 +45,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Regions/5
+        /// <summary>
+        /// Get Region entity by id
+        /// </summary>
+        /// <param name="id">Region entity id</param>
+        /// <returns>Region entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -60,6 +69,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Regions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Region entity by id
+        /// </summary>
+        /// <param name="id">Region entity id that need to be changed</param>
+        /// <param name="region">Region entity that needs to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -95,6 +110,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Regions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Region entity to the database
+        /// </summary>
+        /// <param name="region">Provide country, continent</param>
+        /// <returns>Newly created Region entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -121,6 +141,11 @@ namespace WebApp.ApiControllers
         
 
         // DELETE: api/Regions/5
+        /// <summary>
+        /// Delete Region entity from database by id
+        /// </summary>
+        /// <param name="id">Region entity id that needs to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

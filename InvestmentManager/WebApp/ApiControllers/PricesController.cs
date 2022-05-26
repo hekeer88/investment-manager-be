@@ -29,6 +29,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Prices
+        /// <summary>
+        /// Get all Price entities related with user
+        /// </summary>
+        /// <returns>All Price entities related with user</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -39,6 +43,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Prices/5
+        /// <summary>
+        /// Get Price entity by id
+        /// </summary>
+        /// <param name="id">Price entity id</param>
+        /// <returns>Price entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -58,6 +67,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Prices/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Price entity by its id
+        /// </summary>
+        /// <param name="id">Price entity id that need to be changed</param>
+        /// <param name="price">Price entity that need to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -93,6 +108,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Prices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Price entity and save to the database
+        /// </summary>
+        /// <param name="price">Provide current price, price date, stock id, created at</param>
+        /// <returns>Newly created price entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -115,6 +135,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Prices/5
+        /// <summary>
+        /// Delete Price entity from database by id
+        /// </summary>
+        /// <param name="id">Price entity id that need to be deleted</param>
+        /// <returns><Result/returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

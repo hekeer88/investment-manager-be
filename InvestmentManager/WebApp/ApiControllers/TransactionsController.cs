@@ -23,6 +23,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Transactions
+        /// <summary>
+        /// Get all Transaction entities related with Stock entity and specific user
+        /// </summary>
+        /// <returns>All Transaction entities related with Stock entity and specific user</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -33,6 +37,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Transactions/5
+        /// <summary>
+        /// Get Transaction entity by its id 
+        /// </summary>
+        /// <param name="id">Transaction entity id</param>
+        /// <returns>Transaction entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -52,6 +61,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Transaction entity by its id
+        /// </summary>
+        /// <param name="id">Transaction entity id that needs to be changed</param>
+        /// <param name="transaction">Transaction entity that needs to be </param>
+        /// <returns>Transaction entity</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -87,6 +102,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Transaction entity
+        /// </summary>
+        /// <param name="transaction">Provide quantity, price, date, type, stockId</param>
+        /// <returns>Newly create Transaction entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -109,6 +129,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Transactions/5
+        /// <summary>
+        /// Delete Transaction entity by its id
+        /// </summary>
+        /// <param name="id">Transaction entity id that needs to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

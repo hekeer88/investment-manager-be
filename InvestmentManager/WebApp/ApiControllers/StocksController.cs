@@ -29,6 +29,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Stocks
+        /// <summary>
+        /// Get all Stock entities related with user
+        /// </summary>
+        /// <returns>All Stock entities related with user</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -39,6 +43,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Stocks/5
+        /// <summary>
+        /// Get Stock entity by it id   
+        /// </summary>
+        /// <param name="id">Stock entity id</param>
+        /// <returns>Stock entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -58,6 +67,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Stocks/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Stock entity by its id
+        /// </summary>
+        /// <param name="id">Stock entity id that need to be changed</param>
+        /// <param name="stock">Stock entity that need to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -93,6 +108,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Stocks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Stock entity and save to the database
+        /// </summary>
+        /// <param name="stock">Provide company name, ticker, comment, regionId, portfolioId, industryId</param>
+        /// <returns>Newly created Stock entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -116,6 +136,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Stocks/5
+        /// <summary>
+        /// Delete Stock entity by its id
+        /// </summary>
+        /// <param name="id">Stock entity id that needs to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

@@ -30,6 +30,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Industries
+        /// <summary>
+        /// Get all Industry entities that are saved in the Database.
+        /// </summary>
+        /// <returns>All Industry entites</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -40,6 +44,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Industries/5
+        /// <summary>
+        /// Get Industry entity by id
+        /// </summary>
+        /// <param name="id">Provide industry id</param>
+        /// <returns>Industry entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -59,6 +68,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Industries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Industry entity
+        /// </summary>
+        /// <param name="id">Industry id and Industry entity that need to be changed</param>
+        /// <param name="industry"></param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -94,6 +109,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Industries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create new Industry entity and save to the database
+        /// </summary>
+        /// <param name="industry">Provice: Industry name, created by, created at</param>
+        /// <returns>New created Industry Entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -119,6 +139,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Industries/5
+        /// <summary>
+        /// Deletes Industry entity by id
+        /// </summary>
+        /// <param name="id">Provide Industry id that needd to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]

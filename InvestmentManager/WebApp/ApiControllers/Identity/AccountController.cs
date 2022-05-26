@@ -15,10 +15,10 @@ using WebApp.DTO.Identity;
 
 namespace WebApp.ApiControllers.Identity;
 
+
 [ApiController]
 [ApiVersion( "1.0" )]
 [Route("api/v{version:apiVersion}/identity/[controller]/[action]")]
-// [Route("api/identity/[controller]/[action]")] //see vana
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<AppUser> _signInManager;
@@ -28,6 +28,14 @@ public class AccountController : ControllerBase
     private readonly Random _rnd = new();
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// Account contructor
+    /// </summary>
+    /// <param name="signInManager"></param>
+    /// <param name="userManager"></param>
+    /// <param name="configuration"></param>
+    /// <param name="logger"></param>
+    /// <param name="context"></param>
     public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager,
         IConfiguration configuration, ILogger<AccountController> logger, AppDbContext context)
     {
@@ -115,6 +123,12 @@ public class AccountController : ControllerBase
         return Ok(res);
     }
 
+
+    /// <summary>
+    /// Register user
+    /// </summary>
+    /// <param name="loginData">Supply firstname, lastname, email and password</param>
+    /// <returns>JWT and refresh token</returns>
     [HttpPost]
     public async Task<ActionResult<JwtResponse>> Register([FromBody] Register registrationData)
     {
@@ -207,6 +221,11 @@ public class AccountController : ControllerBase
     }
 
 
+    /// <summary>
+    ///  Refresh token
+    /// </summary>
+    /// <param name="refreshTokenModel">JWT and refrestToken</param>
+    /// <returns>New JWT and refresh token</returns>
     [HttpPost]
     public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenModel refreshTokenModel)
     {

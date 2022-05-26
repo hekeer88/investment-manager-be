@@ -27,6 +27,10 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Portfolios
+        /// <summary>
+        /// Get all Portfolio entities related with user
+        /// </summary>
+        /// <returns>All Portfolio entities related with user</returns>
         [HttpGet]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -37,6 +41,11 @@ namespace WebApp.ApiControllers
         }
 
         // GET: api/Portfolios/5
+        /// <summary>
+        /// Get Portfolio entity by its id
+        /// </summary>
+        /// <param name="id">Portfolio entity id</param>
+        /// <returns>Portfolio entity</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -57,6 +66,12 @@ namespace WebApp.ApiControllers
 
         // PUT: api/Portfolios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Change Portfolio entity by id
+        /// </summary>
+        /// <param name="id">Portfolio entity id that needs to be changed</param>
+        /// <param name="portfolio">Portfolio entity that needs to be changed</param>
+        /// <returns>Result</returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -94,6 +109,11 @@ namespace WebApp.ApiControllers
 
         // POST: api/Portfolios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Post new Portfilio entity in the database
+        /// </summary>
+        /// <param name="portfolio">Name and description</param>
+        /// <returns>Newly created Portfolio entity</returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -125,6 +145,11 @@ namespace WebApp.ApiControllers
         }
 
         // DELETE: api/Portfolios/5
+        /// <summary>
+        /// Delete Portfolio entity by id
+        /// </summary>
+        /// <param name="id">Portfolio entity id that needs to be deleted</param>
+        /// <returns>Result</returns>
         [HttpDelete("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
