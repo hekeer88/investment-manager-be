@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using App.BLL;
 using App.BLL.Services;
@@ -84,7 +86,46 @@ public class UnitTestPortfolioController
     [Fact]
     public async Task IndexAction_ReturnsVmWithData()
     {
-        // // Arrange
+        _ctx.Users.Add(new App.Domain.identity.AppUser()
+        {
+            FirstName = "Test",
+            LastName = "User",
+            PasswordHash = "Tere.123",
+            Email = "test@app.ee"
+        });
+        await _ctx.SaveChangesAsync();
+        
+        // SeedData.SeedTypes(_ctx);
+        // SeedData.SeedAccessTypes(_ctx);
+        _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
+            {
+                Name = "Test Portfolio Description",
+                Description = "Test Portfolio Description",
+            }
+        );
+            
+        await _ctx.SaveChangesAsync();
+            
+        // ACT
+        var result = await _portfolioService.GetAll();
+            
+        // ASSERT
+        Assert.NotNull(result);
+        // _testOutputHelper.WriteLine($"Count of elements: {testVm.ContactTypes.Count}");
+        var enumerable = Enumerable.ToList(result);
+        Assert.Single((IEnumerable) enumerable!);
+        Assert.Equal("Test Portfolio Description", enumerable.First().Name);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // Arrange
         // var testFooBar = new Portfolio() {Value = Guid.NewGuid().ToString()};
         // _ctx.FooBars.Add(testFooBar);
         // await _ctx.SaveChangesAsync();
