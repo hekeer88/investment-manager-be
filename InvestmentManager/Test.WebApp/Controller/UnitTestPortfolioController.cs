@@ -183,50 +183,72 @@ public class UnitTestPortfolioController
     }
 
 
+    [Fact]
+    public async Task Action_DeletePortfolio()
+    {
+        // Arrange
+        _ctx.Users.Add(new App.Domain.identity.AppUser()
+        {
+            FirstName = "Test",
+            LastName = "User",
+            PasswordHash = "Tere.123",
+            Email = "test@app.ee"
+        });
+        
+        _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
+            {
+                Name = "Test Portfolio Name",
+                Description = "Test Portfolio Description",
+            }
+        );
+            
+        await _ctx.SaveChangesAsync();
 
-    
+        // Act
+        var portfolios = await _portfolioService.GetAll();
+        DetachAllEntities();
+        var portfolioId = portfolios.First().Id!;
+        var result =  await _portfolioService.RemoveAsync(portfolioId);
+        await _ctx.SaveChangesAsync();
+        
+        // Assert
+        Assert.NotNull(result);
+        portfolios = await _portfolioService.GetAll();
+        Assert.Empty(portfolios);
+        
+    }
     
 
     private static MapperConfiguration GetDalMapperConfiguration()
     {
         return new(config =>
         {
-            config.CreateMap<AppUser, App.Domain.identity.AppUser>().ReverseMap();
             config.CreateMap<Portfolio, App.Domain.Portfolio>().ReverseMap();
-            config.CreateMap<Loan, App.Domain.Loan>().ReverseMap();
-            config.CreateMap<Cash, App.Domain.Cash>().ReverseMap();
-            config.CreateMap<Industry, App.Domain.Industry>().ReverseMap();
-            config.CreateMap<Price, App.Domain.Price>().ReverseMap();
-            config.CreateMap<Region, App.Domain.Region>().ReverseMap();
-            config.CreateMap<Transaction, App.Domain.Transaction>().ReverseMap();
+
         });
-    }    
-    
-    
+    }
+
     private static MapperConfiguration GetBllMapperConfiguration()
         {
             return new(config =>
             {
                 config.CreateMap<App.BLL.DTO.Portfolio, App.DAL.DTO.Portfolio>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Stock, App.DAL.DTO.Stock>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Loan, App.DAL.DTO.Loan>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Cash, App.DAL.DTO.Cash>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Industry, App.DAL.DTO.Industry>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Price, App.DAL.DTO.Price>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Region, App.DAL.DTO.Region>().ReverseMap();
-                config.CreateMap<App.BLL.DTO.Transaction, App.DAL.DTO.Transaction>().ReverseMap();
-                
                 config.CreateMap<App.Public.DTO.v1.Portfolio, App.BLL.DTO.Portfolio>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Stock, App.BLL.DTO.Stock>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Loan, App.BLL.DTO.Loan>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Cash, App.BLL.DTO.Cash>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Industry, App.BLL.DTO.Industry>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Price, App.BLL.DTO.Price>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Region, App.BLL.DTO.Region>().ReverseMap();
-                config.CreateMap<App.Public.DTO.v1.Transaction, App.BLL.DTO.Transaction>().ReverseMap();
             });
         }
+    
+    private void DetachAllEntities()
+    {
+        var changedEntriesCopy = this._ctx.ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added ||
+                        e.State == EntityState.Modified ||
+                        e.State == EntityState.Deleted)
+            .ToList();
 
-        
+        foreach (var entry in changedEntriesCopy)
+            entry.State = EntityState.Detached;
+            
+        _ctx.ChangeTracker.Clear();
+    }
     
 }
