@@ -14,6 +14,7 @@ using App.Public.DTO.v1;
 using AutoMapper;
 using Base.Contracts.Base;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.ApiControllers;
@@ -34,21 +35,16 @@ namespace Test.WebApp.Controller;
 public class UnitTestPortfolioController
 {
     private readonly ITestOutputHelper _testOutputHelper;
-    // private readonly PortfoliosController _portfolioController;
-    // private readonly AppBLL _appBll;
     private readonly AppUOW _appUow;
-
     private readonly PortfolioService _portfolioService;
     private readonly PortfolioRepository _portfolioRepository;
     private readonly AppDbContext _ctx;
     
-    private readonly AutoMapper.IMapper _bllMapper;
-    // private readonly Mock<IAppBLL> _bllMock;
-
     public UnitTestPortfolioController(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
-        // set up mock db - InMemory
+        
+        // SetUp mock db - InMemory
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
         optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
         _ctx = new AppDbContext(optionsBuilder.Options);
@@ -58,17 +54,6 @@ public class UnitTestPortfolioController
 
         using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
         var logger = loggerFactory.CreateLogger<PortfoliosController>();
-
-        // _bllMock = new Mock<IAppBLL>();
-        //
-        // _bllMock.Setup(x => x.Meetings.GetAllAsync(true)).ReturnsAsync(new List<Meeting>()
-        // {
-        //     new Meeting()
-        //     {
-        //         Description = "TEST"
-        //     }
-        // });
-
 
         var dalMapperCfg = GetDalMapperConfiguration();
         var bllMapperCfg = GetBllMapperConfiguration();
@@ -84,8 +69,9 @@ public class UnitTestPortfolioController
     }
     
     [Fact]
-    public async Task IndexAction_ReturnsVmWithData()
+    public async Task Action_GetPortfolios()
     {
+        // Arrange
         _ctx.Users.Add(new App.Domain.identity.AppUser()
         {
             FirstName = "Test",
@@ -95,56 +81,72 @@ public class UnitTestPortfolioController
         });
         await _ctx.SaveChangesAsync();
         
-        // SeedData.SeedTypes(_ctx);
-        // SeedData.SeedAccessTypes(_ctx);
         _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
             {
-                Name = "Test Portfolio Description",
+                Name = "Test Portfolio Name",
                 Description = "Test Portfolio Description",
             }
         );
             
         await _ctx.SaveChangesAsync();
             
-        // ACT
+        // Act
         var result = await _portfolioService.GetAll();
             
-        // ASSERT
-        Assert.NotNull(result);
-        // _testOutputHelper.WriteLine($"Count of elements: {testVm.ContactTypes.Count}");
+        // Assert
+        Assert.NotEmpty(result);
+        
         var enumerable = Enumerable.ToList(result);
         Assert.Single((IEnumerable) enumerable!);
-        Assert.Equal("Test Portfolio Description", enumerable.First().Name);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // Arrange
-        // var testFooBar = new Portfolio() {Value = Guid.NewGuid().ToString()};
-        // _ctx.FooBars.Add(testFooBar);
-        // await _ctx.SaveChangesAsync();
-        //
-        // // Act
-        // var result = (await _controller.Index()) as ViewResult;
-        //
-        // // Assert
-        // Assert.NotNull(result);
-        // Assert.NotNull(result!.Model);
-        //
-        // var model = result.Model as List<FooBar>;
-        // Assert.NotNull(model);
-        //
-        // Assert.NotEmpty(model);
-        // Assert.Single(model);
-        // Assert.Equal(testFooBar.Value, model!.First().Value);
+        Assert.Equal("Test Portfolio Description", enumerable.First().Description);
     }
-    
+
+
+    [Fact]
+    public async Task Action_GetByPortfolioId()
+    {
+        // Arrange
+        _ctx.Users.Add(new App.Domain.identity.AppUser()
+        {
+            FirstName = "Test",
+            LastName = "User",
+            PasswordHash = "Tere.123",
+            Email = "test@app.ee"
+        });
+        await _ctx.SaveChangesAsync();
+        
+        _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
+            {
+                Name = "Test Portfolio 01",
+                Description = "Test Portfolio Description 01",
+            }
+        );
+        
+        
+        _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
+            {
+                Name = "Test Portfolio 02",
+                Description = "Test Portfolio Description 02",
+            }
+        );
+        
+        await _ctx.SaveChangesAsync();
+        
+            
+        // Act
+        var result = await _portfolioService.GetAll();
+        var resultId = result.First().Id;
+        var resultPortfolio = await _portfolioService.PublicFirstOrDefaultAsync(resultId);
+
+
+        // Assert
+        Assert.NotEmpty(result);
+        Assert.Equal("Test Portfolio 01", resultPortfolio!.Name);
+    }
+
+
+
+
     private static MapperConfiguration GetDalMapperConfiguration()
     {
         return new(config =>
