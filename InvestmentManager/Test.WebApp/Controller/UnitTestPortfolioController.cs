@@ -122,7 +122,6 @@ public class UnitTestPortfolioController
             }
         );
         
-        
         _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
             {
                 Name = "Test Portfolio 02",
@@ -131,21 +130,62 @@ public class UnitTestPortfolioController
         );
         
         await _ctx.SaveChangesAsync();
-        
-            
+
         // Act
         var result = await _portfolioService.GetAll();
         var resultId = result.First().Id;
         var resultPortfolio = await _portfolioService.PublicFirstOrDefaultAsync(resultId);
 
-
         // Assert
         Assert.NotEmpty(result);
         Assert.Equal("Test Portfolio 01", resultPortfolio!.Name);
     }
+    
+    
+    [Fact]
+    public async Task Action_UpdatePortfolios()
+    {
+        // Arrange
+        _ctx.Users.Add(new App.Domain.identity.AppUser()
+        {
+            FirstName = "Test",
+            LastName = "User",
+            PasswordHash = "Tere.123",
+            Email = "test@app.ee"
+        });
+        await _ctx.SaveChangesAsync();
+        
+        _portfolioService.Add(new App.Public.DTO.v1.Portfolio()
+            {
+                Name = "Test Portfolio Name",
+                Description = "Test Portfolio Description",
+            }
+        );
+            
+        await _ctx.SaveChangesAsync();
+            
+        // Act
+        var all = await _portfolioService.GetAll();
+        var portfolio = all.First();
+        
+        var updatedPortfolio = _portfolioService.Update(new App.Public.DTO.v1.Portfolio()
+        {
+            // Id = portfolio.Id,
+            Name = "Updated Name",
+            Description = "Updated Description",
+            AppUserId = portfolio.AppUserId
+        });
+
+        // Assert
+        Assert.NotNull(updatedPortfolio);
+        Assert.Equal("Updated Name", updatedPortfolio.Name);
+        Assert.Equal("Updated Description", updatedPortfolio.Description);
+    }
 
 
 
+    
+    
 
     private static MapperConfiguration GetDalMapperConfiguration()
     {
