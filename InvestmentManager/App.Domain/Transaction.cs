@@ -11,7 +11,7 @@ public class Transaction : DomainEntityMetaId
     [Range(0, 9999999999.99)]
     public decimal TransactionPrice { get; set; } = default!;
     public DateTime TransactionDate { get; set; } = default!;
-    public string Type { get; set; } = default!;
+    // public string Type { get; set; } = default!;
     
     public Guid? StockId { get; set; }
     public Stock? Stock { get; set; }
@@ -21,6 +21,14 @@ public class Transaction : DomainEntityMetaId
     
     public Guid? CashId { get; set; }
     public Cash? Cash { get; set; }
+    
+    public ETransactionType TransactionType { get; set; }
+
+
+    public enum ETransactionType
+    {
+        Buy, Sell, Dividend, Principle, Interest, 
+    }      
 
 
 }
