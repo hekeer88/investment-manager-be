@@ -20,4 +20,6 @@ public class Transaction : DomainEntityId
     
     public Guid? CashId { get; set; }
     public Cash? Cash { get; set; }
+    
+    public Domain.Transaction.ETransactionType TransactionType { get; set; }
 }

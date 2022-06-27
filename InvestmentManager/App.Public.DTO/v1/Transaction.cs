@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using System.Text.Json.Serialization;
 using System.Transactions;
 using Base.Domain;
 
 namespace App.Public.DTO.v1;
 
-public class Transaction : DomainEntityMetaId
+public class Transaction : DomainEntityId
 {
     public int? Quantity { get; set; }
     [Range(0, 9999999999.99)]
@@ -22,6 +23,7 @@ public class Transaction : DomainEntityMetaId
     public Guid? CashId { get; set; }
     // public Cash? Cash { get; set; }
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public Domain.Transaction.ETransactionType TransactionType { get; set; }
 
 
