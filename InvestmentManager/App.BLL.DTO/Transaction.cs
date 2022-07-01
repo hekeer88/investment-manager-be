@@ -10,8 +10,7 @@ public class Transaction : DomainEntityId
     [Range(0, 9999999999.99)]
     public decimal TransactionPrice { get; set; } = default!;
     public DateTime TransactionDate { get; set; } = default!;
-    public string Type { get; set; } = default!;
-    
+
     public Guid? StockId { get; set; }
     public Stock? Stock { get; set; }
     

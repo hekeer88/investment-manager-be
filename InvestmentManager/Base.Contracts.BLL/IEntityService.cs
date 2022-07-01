@@ -8,7 +8,6 @@ public interface IEntityService<TPublicEntity, TBllEntity> : IEntityRepository<T
     TBllEntity, Guid>
     where TBllEntity: class, IDomainEntityId
 {
-    
 }
 
 public interface IEntityService<TPublicEntity, TEntity, TKey> : IEntityRepository<TEntity, TKey>

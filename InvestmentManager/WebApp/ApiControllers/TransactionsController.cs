@@ -118,7 +118,7 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest("Api version is mandatory");
             }
-            _bll.Transactions.Add(transaction);
+            _bll.Transactions.PublicAdd(transaction);
             await _bll.SaveChangesAsync();
 
             return CreatedAtAction("GetTransaction", new

@@ -24,10 +24,7 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
 
         foreach (var stock in res)
         {
-            var quantity = stock.Transactions?.Sum(t => t.Quantity) ?? 0;
-            var lastPrice = stock.Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
-            stock.Balance = quantity * lastPrice;
-            
+            CalculateStockBalance(stock);
             stock.Ticker = stock.Ticker.ToUpper();
         }
 
@@ -46,5 +43,18 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
     {
         var res = BLLMapper.Map(await Repository.FirstOrDefaultAsync(stockId, noTracking));
         return PublicMapper.Map(res);
+    }
+    
+    private void CalculateStockBalance(Stock stock)
+    {
+        // TODO: sum only "BUY" transactions
+        var quantity = stock.Transactions?.Sum(t => t.Quantity) ?? 0;
+        var lastPrice = stock.Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
+        if (lastPrice == 0)
+        {
+            lastPrice =
+                stock.Transactions?.OrderByDescending(t => t.TransactionDate).FirstOrDefault()?.TransactionPrice ?? 0;
+        }
+        stock.Balance = quantity * lastPrice;
     }
 }
