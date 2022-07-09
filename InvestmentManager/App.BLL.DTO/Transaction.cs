@@ -21,4 +21,8 @@ public class Transaction : DomainEntityId
     public Cash? Cash { get; set; }
     
     public Domain.Transaction.ETransactionType TransactionType { get; set; }
+
+    // investment(BUY) transactions are negative and selling(SELL) transactions are positive
+    public virtual decimal Amount => Quantity * TransactionPrice * -1 ?? new decimal(0.0);
+    public double YearsFromFirstTransaction;
 }

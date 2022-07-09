@@ -25,6 +25,8 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         foreach (var stock in res)
         {
             CalculateStockBalance(stock);
+            stock.XIRR = XIRR(stock.Transactions?.ToList() ?? 
+                              new List<Transaction>(), stock.LatestPrice, stock.Quantity); 
             stock.Ticker = stock.Ticker.ToUpper();
         }
 
@@ -47,7 +49,6 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
     
     private void CalculateStockBalance(Stock stock)
     {
-        // TODO: sum only "BUY" transactions
         var quantity = stock.Transactions?.Sum(t => t.Quantity) ?? 0;
         var lastPrice = stock.Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
         if (lastPrice == 0)
@@ -57,4 +58,89 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         }
         stock.Balance = quantity * lastPrice;
     }
+
+    private double XIRR(List<Transaction> transactions, decimal latestPrice, int totalQuantity, int decimals = 4, double maxRate = 1000000)
+    {
+        var transactionList = transactions;
+        transactionList.Add(new Transaction
+        {
+            Quantity = totalQuantity * -1,
+            TransactionPrice = latestPrice,
+            TransactionDate = DateTime.Now,
+        });
+        
+        if (transactionList.Count() == 0)
+        {
+            return 0.0;
+        }
+        if (transactionList.Where(x=> x.Amount > 0).Count() == 0)
+        {
+            throw new Exception("Contains only negative cash flows");
+        }
+        if (transactionList.Where(x => x.Amount < 0).Count() == 0)
+        {
+            throw new Exception("Contains only positive cash flows");
+        }
+        
+        var precision = Math.Pow(10, - decimals);
+        var minRate = -(1 - precision);
+        
+        return XIRRCalculator(minRate, maxRate, transactionList, precision, decimals);
+    }
+
+    
+    
+    private double XIRRCalculator(double lowRate, double highRate, List<Transaction> transactions, double precision, int decimals)
+    {
+        YearsFromFirstTransaction(transactions);
+        var lowResult = CalcEquation(transactions, lowRate);
+        var highResult = CalcEquation(transactions, highRate);
+        
+        if (Math.Sign(lowResult) == Math.Sign(highResult))
+        {
+            throw new Exception("Value cannot be calculated");
+        }
+        
+        var middleRate = (lowRate + highRate) / 2;
+        var middleResult = CalcEquation(transactions, middleRate);
+        if (Math.Sign(middleResult) == Math.Sign(lowResult))
+        {
+            lowRate = middleRate;
+            lowResult = middleResult;
+        }
+        else
+        {
+            highRate = middleRate;
+            highResult = middleResult;
+        }
+        if (Math.Abs(middleResult) > precision)
+        {
+            return XIRRCalculator(lowRate, highRate, transactions, precision, decimals);
+        }
+        else
+        {
+            return Math.Round((highRate + lowRate) / 2, decimals);
+        }
+
+    }
+    
+    
+    private void YearsFromFirstTransaction(List<Transaction>? transactions)
+
+    {
+        var firstDate = transactions!.Min(x => x.TransactionDate);
+
+        foreach (var transaction in transactions!)
+        {
+            transaction.YearsFromFirstTransaction = (transaction.TransactionDate.Subtract(firstDate).Days) / 365;
+        }
+    }
+    
+    private double CalcEquation(List<Transaction> transactions, double interestRate)
+    {
+        return transactions.Select(x => (decimal.ToDouble(x.Amount) / (Math.Pow((1 + interestRate), x.YearsFromFirstTransaction)))).Sum(x => x);
+    }
+    
+    
+    
 }

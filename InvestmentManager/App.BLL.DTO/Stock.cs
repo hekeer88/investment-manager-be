@@ -14,6 +14,7 @@ public class Stock : DomainEntityId
     public string? Comment { get; set; }
     
     public decimal? Balance { get; set; }
+    public double? XIRR { get; set; }
 
     public ICollection<Price>? Prices { get; set; }
     public ICollection<Transaction>? Transactions { get; set; }
@@ -25,7 +26,7 @@ public class Stock : DomainEntityId
     public Guid? IndustryId { get; set; }
     public Industry? Industry { get; set; }
     
-    public virtual decimal? Quantity
+    public virtual int Quantity
     {
         get
         {
@@ -33,7 +34,7 @@ public class Stock : DomainEntityId
         }
     }
 
-    public virtual decimal? LatestPrice
+    public virtual decimal LatestPrice
     {
         get
         {
