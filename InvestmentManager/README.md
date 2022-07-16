@@ -57,3 +57,7 @@ docker push henri88/docker-test-aspnet-6:latest
 
 Update:
 kui webhook on lisatud(hetkel on), siis peale muudatust build -> tag(as latest again) -> push
+
+
+XIRR method: https://www.klearlending.com/en/blog/articles/XIRR-demystified
+

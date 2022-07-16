@@ -6,6 +6,7 @@ namespace App.BLL.DTO;
 
 public class Transaction : DomainEntityId
 {
+
     public int? Quantity { get; set; }
     [Range(0, 9999999999.99)]
     public decimal TransactionPrice { get; set; } = default!;
@@ -24,5 +25,5 @@ public class Transaction : DomainEntityId
 
     // investment(BUY) transactions are negative and selling(SELL) transactions are positive
     public virtual decimal Amount => Quantity * TransactionPrice * -1 ?? new decimal(0.0);
-    public double YearsFromFirstTransaction;
+    public double YearsFromFirstTransaction { get; set; }
 }

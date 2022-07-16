@@ -85,16 +85,18 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         var precision = Math.Pow(10, - decimals);
         var minRate = -(1 - precision);
         
-        return XIRRCalculator(minRate, maxRate, transactionList, precision, decimals);
+        YearsFromFirstTransaction(transactionList);
+        var lowResult = CalcEquation(transactionList, minRate);
+        var highResult = CalcEquation(transactionList, maxRate);
+        
+        return XIRRCalculator(minRate, maxRate, lowResult, highResult, transactionList, precision, decimals) * 100;
     }
 
     
     
-    private double XIRRCalculator(double lowRate, double highRate, List<Transaction> transactions, double precision, int decimals)
+    private double XIRRCalculator(double lowRate, double highRate, double lowResult, double highResult,
+        List<Transaction> transactions, double precision, int decimals)
     {
-        YearsFromFirstTransaction(transactions);
-        var lowResult = CalcEquation(transactions, lowRate);
-        var highResult = CalcEquation(transactions, highRate);
         
         if (Math.Sign(lowResult) == Math.Sign(highResult))
         {
@@ -115,7 +117,7 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         }
         if (Math.Abs(middleResult) > precision)
         {
-            return XIRRCalculator(lowRate, highRate, transactions, precision, decimals);
+            return XIRRCalculator(lowRate, highRate, lowResult, highResult, transactions, precision, decimals);
         }
         else
         {
@@ -125,20 +127,21 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
     }
     
     
-    private void YearsFromFirstTransaction(List<Transaction>? transactions)
-
+    private static void YearsFromFirstTransaction(List<Transaction> transactions)
     {
         var firstDate = transactions!.Min(x => x.TransactionDate);
 
         foreach (var transaction in transactions!)
         {
-            transaction.YearsFromFirstTransaction = (transaction.TransactionDate.Subtract(firstDate).Days) / 365;
+            var x = ((double)transaction.TransactionDate.Subtract(firstDate).Days) / 365;
+            transaction.YearsFromFirstTransaction = x;
         }
     }
     
     private double CalcEquation(List<Transaction> transactions, double interestRate)
     {
-        return transactions.Select(x => (decimal.ToDouble(x.Amount) / (Math.Pow((1 + interestRate), x.YearsFromFirstTransaction)))).Sum(x => x);
+        return transactions.Select(x => 
+            (decimal.ToDouble(x.Amount) / (Math.Pow((1 + interestRate), x.YearsFromFirstTransaction)))).Sum(x => x);
     }
     
     
