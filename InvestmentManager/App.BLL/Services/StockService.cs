@@ -59,7 +59,7 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         stock.Balance = quantity * lastPrice;
     }
 
-    private double XIRR(List<Transaction> transactions, decimal latestPrice, int totalQuantity, int decimals = 4, double maxRate = 1000000)
+    private double? XIRR(List<Transaction> transactions, decimal latestPrice, int totalQuantity, int decimals = 4, double maxRate = 1000000)
     {
         var transactionList = transactions;
         transactionList.Add(new Transaction
@@ -69,9 +69,9 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
             TransactionDate = DateTime.Now,
         });
         
-        if (transactionList.Count() == 0)
+        if (transactionList.Count() == 1)
         {
-            return 0.0;
+            return null;
         }
         if (transactionList.Where(x=> x.Amount > 0).Count() == 0)
         {
@@ -141,7 +141,7 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
     private double CalcEquation(List<Transaction> transactions, double interestRate)
     {
         return transactions.Select(x => 
-            (decimal.ToDouble(x.Amount) / (Math.Pow((1 + interestRate), x.YearsFromFirstTransaction)))).Sum(x => x);
+            (decimal.ToDouble(x.Amount) / (Math.Pow((1 + interestRate), x.YearsFromFirstTransaction ?? 0)))).Sum(x => x);
     }
     
     

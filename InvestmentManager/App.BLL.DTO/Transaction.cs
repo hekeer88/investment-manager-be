@@ -25,5 +25,5 @@ public class Transaction : DomainEntityId
 
     // investment(BUY) transactions are negative and selling(SELL) transactions are positive
     public virtual decimal Amount => Quantity * TransactionPrice * -1 ?? new decimal(0.0);
-    public double YearsFromFirstTransaction { get; set; }
+    public double? YearsFromFirstTransaction { get; set; }
 }
