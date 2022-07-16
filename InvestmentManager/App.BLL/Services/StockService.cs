@@ -25,8 +25,12 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         foreach (var stock in res)
         {
             CalculateStockBalance(stock);
-            stock.XIRR = XIRR(stock.Transactions?.ToList() ?? 
-                              new List<Transaction>(), stock.LatestPrice, stock.Quantity); 
+            if (stock.LatestPrice != null)
+            {
+                stock.XIRR = XIRR(stock.Transactions?.ToList() ?? 
+                                  new List<Transaction>(), (decimal) stock.LatestPrice, stock.Quantity); 
+            }
+            
             stock.Ticker = stock.Ticker.ToUpper();
         }
 
@@ -76,10 +80,12 @@ public class StockService: BaseEntityService<App.Public.DTO.v1.Stock,
         if (transactionList.Where(x=> x.Amount > 0).Count() == 0)
         {
             throw new Exception("Contains only negative cash flows");
+            
         }
         if (transactionList.Where(x => x.Amount < 0).Count() == 0)
         {
             throw new Exception("Contains only positive cash flows");
+            
         }
         
         var precision = Math.Pow(10, - decimals);

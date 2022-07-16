@@ -34,11 +34,16 @@ public class Stock : DomainEntityId
         }
     }
 
-    public virtual decimal LatestPrice
+    public virtual decimal? LatestPrice
     {
         get
         {
-            return Prices?.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice ?? 0;
+            if (Prices != null && Prices.Count != 0)
+            {
+                return Prices.OrderByDescending(p => p.PriceTime).FirstOrDefault()?.CurrentPrice;
+            }
+
+            return Transactions?.OrderByDescending(x => x.TransactionDate).FirstOrDefault()?.TransactionPrice;
         }
     }
 
